@@ -1,0 +1,98 @@
+---
+/**
+ * ErrorPage.astro
+ * Componente para páginas de error (404, 500, etc.)
+ */
+
+export interface Props {
+  code: string;
+  title: string;
+  message: string;
+  primaryAction?: {
+    text: string;
+    href: string;
+  };
+  secondaryAction?: {
+    text: string;
+    href: string;
+  };
+}
+
+const { code, title, message, primaryAction, secondaryAction } = Astro.props;
+---
+
+<div class="max-w-2xl mx-auto text-center px-4">
+  <!-- Icono de error con efecto glow -->
+  <div
+    class="w-32 h-32 mx-auto mb-8 rounded-2xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex items-center justify-center shadow-lg glow-accent"
+  >
+    <svg
+      class="w-20 h-20 text-red-400"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+  </div>
+
+  <!-- Título del error -->
+  <h1 class="text-6xl md:text-8xl font-bold mb-4">
+    <span class="text-gradient">{code}</span>
+  </h1>
+
+  <h2 class="text-2xl md:text-3xl font-semibold text-white mb-4">
+    {title}
+  </h2>
+
+  <p class="text-lg text-slate-400 mb-8 max-w-xl mx-auto">
+    {message}
+  </p>
+
+  <!-- Botones de acción -->
+  {(primaryAction || secondaryAction) && (
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      {primaryAction && (
+        <a href={primaryAction.href} class="btn-primary text-lg px-8 py-3">
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
+          </svg>
+          {primaryAction.text}
+        </a>
+      )}
+      {secondaryAction && (
+        <a href={secondaryAction.href} class="btn-secondary text-lg px-8 py-3">
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            />
+          </svg>
+          {secondaryAction.text}
+        </a>
+      )}
+    </div>
+  )}
+</div>

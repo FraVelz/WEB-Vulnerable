@@ -1,0 +1,21 @@
+---
+/**
+ * LegalListItem.astro
+ * Componente para items de lista en el aviso legal
+ */
+export interface Props {
+  text: string;
+  variant?: 'allowed' | 'prohibited';
+}
+
+const { text, variant = 'allowed' } = Astro.props;
+---
+
+<li class="flex items-start gap-3">
+  {variant === 'allowed' ? (
+    <span class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-sm flex-shrink-0">✓</span>
+  ) : (
+    <span class="w-6 h-6 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-sm flex-shrink-0">✗</span>
+  )}
+  <span class="text-slate-300">{text}</span>
+</li>

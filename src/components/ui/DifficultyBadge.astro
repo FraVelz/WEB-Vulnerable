@@ -1,0 +1,22 @@
+---
+/**
+ * DifficultyBadge.astro
+ * Badge de dificultad para vulnerabilidades
+ */
+
+export interface Props {
+  difficulty: 'Básico' | 'Intermedio' | 'Avanzado';
+}
+
+const { difficulty } = Astro.props;
+
+const difficultyColors: Record<string, string> = {
+  'Básico': 'text-green-400 bg-green-500/10 border-green-500/30',
+  'Intermedio': 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30',
+  'Avanzado': 'text-red-400 bg-red-500/10 border-red-500/30',
+};
+---
+
+<span class={`px-2 py-0.5 rounded-full text-xs font-medium border ${difficultyColors[difficulty] || difficultyColors['Básico']}`}>
+  {difficulty}
+</span>

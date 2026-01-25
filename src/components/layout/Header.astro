@@ -1,0 +1,197 @@
+---
+/**
+ * Navbar.astro
+ * Barra de navegación principal del laboratorio
+ */
+
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { href: "/hacking", label: "Hacking", icon: "grid" },
+  { href: "/flags", label: "Banderas", icon: "chart" },
+];
+
+function isActive(href: string): boolean {
+  return currentPath === href || currentPath.startsWith(href + "/");
+}
+---
+
+<header
+  class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50"
+>
+  <div class="container-lab">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <button id="logo" class="flex items-center gap-3 group">
+        <img class="w-8 h-8" src="./icon.svg" alt="Logo de la Web" />
+
+        <div class="hidden sm:block">
+          <span
+            class="font-semibold text-white group-hover:text-lab-primary-400 transition-colors"
+          >
+            Vulnerable Web
+          </span>
+          <span class="text-xs text-slate-500 block">Educational</span>
+        </div>
+      </button>
+
+      <script>
+        document.querySelector("#logo")?.addEventListener("click", () => {
+          window.location.reload();
+        });
+      </script>
+
+      <!-- Navegación principal -->
+      <nav class="hidden md:flex items-center gap-1">
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              class:list={[
+                "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                isActive(link.href)
+                  ? "bg-slate-800 text-white"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/50",
+              ]}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <!-- Acciones del usuario -->
+      <div class="flex items-center gap-3">
+        <!-- Indicador de entorno -->
+        <div
+          class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30"
+        >
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span class="text-xs text-amber-300 font-medium"
+            >Entorno de Laboratorio</span
+          >
+        </div>
+
+        <!-- Menú de usuario -->
+        <div class="relative" id="user-menu">
+          <button
+            class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-800 transition-colors"
+            aria-label="Menú de usuario"
+            id="user-menu-button"
+          >
+          <img class="h-8 w-8 rounded-full" src="./logo.webp" alt="Foto de perfil del Usuario">
+                       <svg
+              class="w-4 h-4 text-slate-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          <!-- Dropdown del usuario (oculto por defecto) -->
+          <div
+            class="absolute right-0 mt-2 w-48 py-2 bg-slate-800 rounded-lg border border-slate-700 shadow-xl hidden"
+            id="user-dropdown"
+          >
+            <div class="px-4 py-2 border-b border-slate-700">
+              <p class="text-sm font-medium text-white">Usuario Lab</p>
+              <p class="text-xs text-slate-400">lab@example.com</p>
+            </div>
+            <a
+              href="/profile"
+              class="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white"
+            >
+              Perfil
+            </a>
+            <a
+              href="/settings"
+              class="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white"
+            >
+              Configuración
+            </a>
+            <hr class="my-2 border-slate-700" />
+            <a
+              href="/logout"
+              class="block px-4 py-2 text-sm text-red-400 hover:bg-slate-700 hover:text-red-300"
+            >
+              Cerrar Sesión
+            </a>
+          </div>
+        </div>
+
+        <!-- Botón menú móvil -->
+        <button
+          class="md:hidden p-2 rounded-lg hover:bg-slate-800 transition-colors"
+          aria-label="Abrir menú"
+          id="mobile-menu-button"
+        >
+          <svg
+            class="w-6 h-6 text-slate-300"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú móvil -->
+    <div class="md:hidden hidden pb-4" id="mobile-menu">
+      <div class="flex flex-col gap-1 pt-4 border-t border-slate-800">
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              class:list={[
+                "px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                isActive(link.href)
+                  ? "bg-slate-800 text-white"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/50",
+              ]}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Toggle del menú de usuario
+  const userMenuButton = document.getElementById("user-menu-button");
+  const userDropdown = document.getElementById("user-dropdown");
+
+  userMenuButton?.addEventListener("click", () => {
+    userDropdown?.classList.toggle("hidden");
+  });
+
+  // Toggle del menú móvil
+  const mobileMenuButton = document.getElementById("mobile-menu-button");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  mobileMenuButton?.addEventListener("click", () => {
+    mobileMenu?.classList.toggle("hidden");
+  });
+
+  // Cerrar dropdowns al hacer click fuera
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest("#user-menu")) {
+      userDropdown?.classList.add("hidden");
+    }
+  });
+</script>

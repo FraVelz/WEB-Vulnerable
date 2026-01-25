@@ -1,0 +1,119 @@
+---
+/**
+ * UsersTable.astro
+ * Tabla de usuarios con acciones
+ */
+import type { User } from "@/types";
+import UserTableRow from "./UserTableRow.astro";
+
+export interface Props {
+  users: User[];
+}
+
+const { users } = Astro.props;
+---
+
+<div class="card p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-xl font-semibold text-white flex items-center gap-2">
+      <svg
+        class="w-5 h-5 text-lab-primary-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+        />
+      </svg>
+      Lista de Usuarios
+    </h2>
+    <div class="flex gap-2">
+      <button class="btn-secondary text-sm">
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+          />
+        </svg>
+        Exportar
+      </button>
+      <button class="btn-primary text-sm">
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          />
+        </svg>
+        Nuevo Usuario
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla responsive -->
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <thead>
+        <tr class="border-b border-slate-700">
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-300">
+            Usuario
+          </th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-300">
+            Rol
+          </th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-300">
+            Estado
+          </th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-300">
+            Progreso
+          </th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-300">
+            Último Acceso
+          </th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-300">
+            Ubicación
+          </th>
+          <th class="text-left py-3 px-4 text-sm font-medium text-slate-300">
+            Acciones
+          </th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-800">
+        {users.map((user) => (
+          <UserTableRow
+            id={user.id}
+            username={user.username}
+            email={user.email}
+            role={user.role}
+            status={user.status}
+            flagsCaptured={user.flagsCaptured}
+            vulnerabilitiesCompleted={user.vulnerabilitiesCompleted}
+            points={user.points}
+            lastLogin={user.lastLogin}
+            ipAddress={user.ipAddress}
+            location={user.location}
+            sessions={user.sessions}
+            twoFactor={user.twoFactor}
+          />
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>

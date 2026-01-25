@@ -1,0 +1,120 @@
+---
+/**
+ * profile.astro
+ * Página de perfil del usuario
+ */
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import InfoCard from "@/components/common/InfoCard.astro";
+import UserInfo from "./_components/UserInfo.astro";
+import ProfileStats from "./_components/ProfileStats.astro";
+import ProfileRank from "./_components/ProfileRank.astro";
+import ProfileQuickActions from "./_components/ProfileQuickActions.astro";
+import ProfileSettings from "./_components/ProfileSettings.astro";
+
+// Datos del usuario (en producción vendrían del backend)
+const userProfile = {
+  username: "demo",
+  email: "lab@example.com",
+  role: "Local Storage",
+  joinedAt: "15 de Enero, 2026",
+  lastLogin: "Hace 2 horas",
+  totalTime: "2h 15m",
+  flagsCaptured: 2,
+  totalFlags: 10,
+  vulnerabilitiesCompleted: 3,
+  totalVulnerabilities: 25,
+  points: 300,
+  rank: "Principiante",
+  achievements: [
+    {
+      id: "first-flag",
+      title: "Primera Flag",
+      description: "Capturaste tu primera flag",
+      unlocked: true,
+    },
+    {
+      id: "sql-master",
+      title: "Maestro SQL",
+      description: "Completaste todos los desafíos de SQL Injection",
+      unlocked: false,
+    },
+    {
+      id: "xss-expert",
+      title: "Experto XSS",
+      description: "Dominaste todas las variantes de XSS",
+      unlocked: false,
+    },
+    {
+      id: "ctf-champion",
+      title: "Campeón CTF",
+      description: "Completaste todos los desafíos del CTF",
+      unlocked: false,
+    },
+  ],
+  recentActivity: [
+    {
+      type: "flag",
+      description: "Capturaste la flag flag-002",
+      time: "Hace 1 hora",
+      points: 100,
+    },
+    {
+      type: "vulnerability",
+      description: "Completaste A03: Injection",
+      time: "Hace 3 horas",
+      points: 50,
+    },
+    {
+      type: "flag",
+      description: "Capturaste la flag flag-005",
+      time: "Ayer",
+      points: 150,
+    },
+  ],
+};
+---
+
+<Layout title="Mi Perfil">
+  <div class="container-lab py-8">
+    <PageHeader
+      title="Mi Perfil"
+      subtitle="Información de tu cuenta y progreso en el laboratorio"
+    />
+
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Columna principal -->
+      <div class="lg:col-span-2 space-y-6">
+        <UserInfo
+          username={userProfile.username}
+          email={userProfile.email}
+          role={userProfile.role}
+          joinedAt={userProfile.joinedAt}
+          lastLogin={userProfile.lastLogin}
+        />
+
+        <ProfileStats
+          flagsCaptured={userProfile.flagsCaptured}
+          totalFlags={userProfile.totalFlags}
+          vulnerabilitiesCompleted={userProfile.vulnerabilitiesCompleted}
+          totalVulnerabilities={userProfile.totalVulnerabilities}
+          points={userProfile.points}
+          totalTime={userProfile.totalTime}
+        />
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <ProfileRank rank={userProfile.rank} />
+
+        <InfoCard title="Acciones Rápidas">
+          <ProfileQuickActions />
+        </InfoCard>
+
+        <InfoCard title="Configuración">
+          <ProfileSettings />
+        </InfoCard>
+      </div>
+    </div>
+  </div>
+</Layout>

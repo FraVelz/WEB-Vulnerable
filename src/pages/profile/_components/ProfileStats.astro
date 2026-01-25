@@ -1,0 +1,58 @@
+---
+/**
+ * ProfileStats.astro
+ * Estadísticas del perfil del usuario
+ */
+
+export interface Props {
+  flagsCaptured: number;
+  totalFlags: number;
+  vulnerabilitiesCompleted: number;
+  totalVulnerabilities: number;
+  points: number;
+  totalTime: string;
+}
+
+const { flagsCaptured, totalFlags, vulnerabilitiesCompleted, totalVulnerabilities, points, totalTime } = Astro.props;
+---
+
+<div class="grid sm:grid-cols-2 gap-4">
+  <div class="card p-6 text-center">
+    <p class="text-3xl font-bold text-gradient">
+      {flagsCaptured}/{totalFlags}
+    </p>
+    <p class="text-sm text-slate-400 mt-1">Flags Capturadas</p>
+    <div class="mt-3 progress-bar">
+      <div
+        class="progress-bar-fill"
+        style={`width: ${(flagsCaptured / totalFlags) * 100}%`}
+      >
+      </div>
+    </div>
+  </div>
+  <div class="card p-6 text-center">
+    <p class="text-3xl font-bold text-lab-primary-400">
+      {vulnerabilitiesCompleted}/{totalVulnerabilities}
+    </p>
+    <p class="text-sm text-slate-400 mt-1">Vulnerabilidades</p>
+    <div class="mt-3 progress-bar">
+      <div
+        class="progress-bar-fill"
+        style={`width: ${(vulnerabilitiesCompleted / totalVulnerabilities) * 100}%`}
+      >
+      </div>
+    </div>
+  </div>
+  <div class="card p-6 text-center">
+    <p class="text-3xl font-bold text-lab-accent-400">
+      {points}
+    </p>
+    <p class="text-sm text-slate-400 mt-1">Puntos Totales</p>
+  </div>
+  <div class="card p-6 text-center">
+    <p class="text-3xl font-bold text-yellow-400">
+      {totalTime}
+    </p>
+    <p class="text-sm text-slate-400 mt-1">Tiempo Total</p>
+  </div>
+</div>

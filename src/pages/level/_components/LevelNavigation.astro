@@ -1,0 +1,42 @@
+---
+/**
+ * LevelNavigation.astro
+ * Navegación entre niveles
+ */
+export interface Props {
+  currentLevelId: string;
+}
+
+const { currentLevelId } = Astro.props;
+---
+
+<div class="card p-6">
+  <h3 class="text-sm font-medium text-slate-500 mb-3 uppercase tracking-wider">Navegación</h3>
+  <div class="flex flex-col gap-2">
+    {parseInt(currentLevelId) > 1 && (
+      <a 
+        href={`/level/${parseInt(currentLevelId) - 1}`}
+        class="btn-ghost text-left"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Nivel {parseInt(currentLevelId) - 1}
+      </a>
+    )}
+    {parseInt(currentLevelId) < 5 && (
+      <a 
+        href={`/level/${parseInt(currentLevelId) + 1}`}
+        class="btn-ghost text-left"
+      >
+        Nivel {parseInt(currentLevelId) + 1}
+        <svg class="w-4 h-4 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    )}
+    <a href="/hacking" class="btn-secondary mt-2">
+      Volver al Panel
+    </a>
+  </div>
+</div>

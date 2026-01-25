@@ -1,0 +1,32 @@
+---
+/**
+ * PageHeader.astro
+ * Encabezado de página reutilizable
+ */
+
+export interface Props {
+  title: string;
+  subtitle?: string;
+  gradient?: boolean;
+}
+
+const { title, subtitle, gradient = false } = Astro.props;
+---
+
+<div class="mb-8">
+  <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
+    {gradient ? (
+      <>
+        <span class="text-gradient">{title.split(' ')[0]}</span>
+        {title.split(' ').slice(1).join(' ') && (
+          <span class="text-white"> {title.split(' ').slice(1).join(' ')}</span>
+        )}
+      </>
+    ) : (
+      title
+    )}
+  </h1>
+  {subtitle && (
+    <p class="text-slate-400 text-lg">{subtitle}</p>
+  )}
+</div>

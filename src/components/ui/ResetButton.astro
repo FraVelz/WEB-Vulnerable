@@ -1,0 +1,127 @@
+---
+/**
+ * ResetButton.astro
+ * Botón para reiniciar el progreso del laboratorio
+ */
+
+export interface Props {
+  variant?: 'full' | 'compact';
+}
+
+const { variant = 'full' } = Astro.props;
+---
+
+{variant === 'full' ? (
+  <div class="card p-6 border-red-500/20">
+    <div class="flex items-start gap-4">
+      <div class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center flex-shrink-0">
+        <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+      </div>
+      <div class="flex-1">
+        <h4 class="font-semibold text-white mb-1">Reiniciar Laboratorio</h4>
+        <p class="text-sm text-slate-400 mb-4">
+          Esta acción borrará todo tu progreso y volverás al nivel 1. 
+          Los datos del laboratorio se restaurarán a su estado inicial.
+        </p>
+        <button 
+          class="btn-danger"
+          id="reset-lab-button"
+          data-action="reset-lab"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Reiniciar Todo el Progreso
+        </button>
+      </div>
+    </div>
+  </div>
+) : (
+  <button 
+    class="btn-ghost text-red-400 hover:text-red-300 hover:bg-red-500/10"
+    id="reset-lab-button-compact"
+    data-action="reset-lab"
+    title="Reiniciar laboratorio"
+  >
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+    </svg>
+    <span class="hidden sm:inline">Reiniciar</span>
+  </button>
+)}
+
+<!-- Modal de confirmación -->
+<div id="reset-modal" class="fixed inset-0 z-50 hidden">
+  <div class="overlay" id="reset-modal-overlay"></div>
+  <div class="fixed inset-0 flex items-center justify-center p-4">
+    <div class="card p-6 max-w-md w-full relative z-10 animate-in">
+      <div class="text-center">
+        <div class="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-white mb-2">¿Reiniciar el laboratorio?</h3>
+        <p class="text-slate-400 mb-6">
+          Esta acción no se puede deshacer. Perderás todo tu progreso y los datos del laboratorio volverán a su estado inicial.
+        </p>
+        <div class="flex gap-3 justify-center">
+          <button class="btn-secondary" id="reset-cancel">
+            Cancelar
+          </button>
+          <button class="btn-danger" id="reset-confirm">
+            Sí, reiniciar todo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Gestión del modal de reinicio
+  const resetButtons = document.querySelectorAll('[data-action="reset-lab"]');
+  const modal = document.getElementById('reset-modal');
+  const modalOverlay = document.getElementById('reset-modal-overlay');
+  const cancelButton = document.getElementById('reset-cancel');
+  const confirmButton = document.getElementById('reset-confirm');
+
+  function openModal() {
+    modal?.classList.remove('hidden');
+  }
+
+  function closeModal() {
+    modal?.classList.add('hidden');
+  }
+
+  resetButtons.forEach(button => {
+    button.addEventListener('click', openModal);
+  });
+
+  modalOverlay?.addEventListener('click', closeModal);
+  cancelButton?.addEventListener('click', closeModal);
+
+  confirmButton?.addEventListener('click', async () => {
+    // Aquí iría la lógica de reinicio
+    // Por ahora solo simula el proceso
+    confirmButton.textContent = 'Reiniciando...';
+    confirmButton.setAttribute('disabled', 'true');
+    
+    // Simular llamada al API
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Redirigir al apartado hacking
+    window.location.href = '/hacking?reset=success';
+  });
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>

@@ -1,0 +1,182 @@
+---
+/**
+ * legal.astro
+ * Página de aviso legal completo
+ */
+import Layout from "@/layouts/Layout.astro";
+import LegalHeader from "./_components/LegalHeader.astro";
+import LegalBanner from "./_components/LegalBanner.astro";
+import LegalSection from "./_components/LegalSection.astro";
+import LegalListItem from "./_components/LegalListItem.astro";
+import LegalAcceptance from "./_components/LegalAcceptance.astro";
+---
+
+<Layout title="Aviso Legal" showHeader={false}>
+  <div class="container-lab py-12">
+    <div class="max-w-4xl mx-auto">
+      <LegalHeader />
+
+      <!-- Contenido legal -->
+      <div class="space-y-8">
+        <LegalBanner />
+
+        <!-- Sección: Propósito -->
+        <LegalSection
+          title="1. Propósito Educativo"
+          iconPath="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          iconColorClass="text-lab-primary-400"
+        >
+          <div class="prose prose-slate prose-invert max-w-none">
+            <p class="text-slate-300">
+              Vulnerable Web es una plataforma de aprendizaje diseñada
+              exclusivamente para fines educativos. Su objetivo es:
+            </p>
+            <ul class="list-disc list-inside text-slate-400 space-y-2 mt-4">
+              <li>Enseñar conceptos fundamentales de seguridad web</li>
+              <li>Demostrar cómo se implementan defensas efectivas</li>
+              <li>Promover buenas prácticas de desarrollo seguro</li>
+              <li>Formar profesionales conscientes de la seguridad</li>
+            </ul>
+          </div>
+        </LegalSection>
+
+        <!-- Sección: Uso permitido -->
+        <LegalSection
+          title="2. Uso Permitido"
+          iconPath="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+          iconColorClass="text-green-400"
+        >
+          <div class="text-slate-300">
+            <p class="mb-4">
+              El uso de este laboratorio está permitido únicamente para:
+            </p>
+            <ul class="space-y-3">
+              <LegalListItem
+                text="Aprendizaje personal sobre seguridad web"
+                variant="allowed"
+              />
+              <LegalListItem
+                text="Formación académica en instituciones educativas"
+                variant="allowed"
+              />
+              <LegalListItem
+                text="Capacitación profesional en entornos corporativos controlados"
+                variant="allowed"
+              />
+              <LegalListItem
+                text="Investigación de seguridad responsable"
+                variant="allowed"
+              />
+            </ul>
+          </div>
+        </LegalSection>
+
+        <!-- Sección: Uso prohibido -->
+        <LegalSection
+          title="3. Uso Prohibido"
+          iconPath="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+          iconColorClass="text-red-400"
+          variant="danger"
+        >
+          <div class="text-slate-300">
+            <p class="mb-4">
+              Está <strong class="text-red-400">estrictamente prohibido</strong
+              >:
+            </p>
+            <ul class="space-y-3">
+              <LegalListItem
+                text="Usar técnicas aprendidas aquí contra sistemas sin autorización"
+                variant="prohibited"
+              />
+              <LegalListItem
+                text="Intentar comprometer la infraestructura del laboratorio"
+                variant="prohibited"
+              />
+              <LegalListItem
+                text="Distribuir herramientas o información para actividades maliciosas"
+                variant="prohibited"
+              />
+              <LegalListItem
+                text="Acceder a datos de otros usuarios del laboratorio"
+                variant="prohibited"
+              />
+            </ul>
+          </div>
+        </LegalSection>
+
+        <!-- Sección: Responsabilidad -->
+        <LegalSection
+          title="4. Limitación de Responsabilidad"
+          iconPath="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+          iconColorClass="text-lab-accent-400"
+        >
+          <div class="text-slate-400 space-y-4">
+            <p>
+              Los creadores y mantenedores de Vulnerable Web no se hacen
+              responsables del mal uso que cualquier usuario pueda hacer del
+              conocimiento adquirido en esta plataforma.
+            </p>
+            <p>
+              El usuario acepta que el uso de esta herramienta es bajo su propia
+              responsabilidad y que cualquier acción realizada fuera de este
+              entorno controlado es de su exclusiva responsabilidad legal y
+              ética.
+            </p>
+          </div>
+        </LegalSection>
+
+        <!-- Sección: Datos y privacidad -->
+        <LegalSection
+          title="5. Datos y Privacidad"
+          iconPath="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+          iconColorClass="text-blue-400"
+        >
+          <div class="text-slate-400 space-y-4">
+            <p>
+              Este laboratorio <strong class="text-white"
+                >no contiene datos reales</strong
+              >. Todos los datos utilizados son ficticios y están diseñados
+              únicamente para propósitos educativos.
+            </p>
+            <p>
+              No se almacena información personal sensible de los usuarios más
+              allá de lo estrictamente necesario para el funcionamiento del
+              laboratorio.
+            </p>
+          </div>
+        </LegalSection>
+
+        <!-- Sección: Consecuencias legales -->
+        <LegalSection
+          title="6. Consecuencias Legales"
+          iconPath="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          iconColorClass="text-red-400"
+          variant="warning"
+        >
+          <div class="text-slate-300">
+            <p class="mb-4">
+              El acceso no autorizado a sistemas informáticos es un delito en la
+              mayoría de jurisdicciones. Las consecuencias pueden incluir:
+            </p>
+            <ul class="space-y-2 text-slate-400">
+              <li>• Multas económicas significativas</li>
+              <li>• Penas de prisión</li>
+              <li>• Responsabilidad civil por daños</li>
+              <li>• Antecedentes penales</li>
+            </ul>
+            <p class="mt-4 text-amber-200/80 font-medium">
+              Utiliza el conocimiento de manera ética y responsable.
+            </p>
+          </div>
+        </LegalSection>
+
+        <LegalAcceptance />
+
+        <!-- Última actualización -->
+        <p class="text-center text-sm text-slate-500 pt-8">
+          Última actualización: Enero 2026
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>

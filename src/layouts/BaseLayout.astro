@@ -1,0 +1,22 @@
+---
+interface Props {
+  showHeader?: boolean;
+  classname?: string;
+}
+
+const { showHeader = true, classname = "" } = Astro.props;
+
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer.astro";
+---
+
+<div class="min-h-screen flex flex-col">
+  {showHeader && <Header />}
+
+  <!-- Contenido principal -->
+  <main class={`flex-1 ${classname}`}>
+    <slot />
+  </main>
+
+  <Footer />
+</div>

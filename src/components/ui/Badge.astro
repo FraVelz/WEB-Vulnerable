@@ -1,0 +1,31 @@
+---
+/**
+ * Badge.astro
+ * Badge reutilizable con diferentes variantes
+ */
+
+export interface Props {
+  text: string;
+  variant?: 'info' | 'success' | 'warning' | 'danger' | 'locked';
+  size?: 'sm' | 'md';
+}
+
+const { text, variant = 'info', size = 'md' } = Astro.props;
+
+const variantClasses = {
+  info: 'badge-info',
+  success: 'badge-success',
+  warning: 'badge-warning',
+  danger: 'badge-danger',
+  locked: 'badge-locked',
+};
+
+const sizeClasses = {
+  sm: 'text-xs px-2 py-0.5',
+  md: 'text-xs px-2.5 py-1',
+};
+---
+
+<span class={`${variantClasses[variant]} ${sizeClasses[size]}`}>
+  {text}
+</span>

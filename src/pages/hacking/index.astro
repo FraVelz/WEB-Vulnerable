@@ -1,0 +1,215 @@
+---
+/**
+ * hacking/index.astro
+ * Panel principal con todas las vulnerabilidades web organizadas
+ */
+import Layout from '@/layouts/Layout.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import SearchBar from '@/components/ui/SearchBar.astro';
+import StatCard from '@/components/ui/StatCard.astro';
+import EthicalBanner from '@/components/common/EthicalBanner.astro';
+import InfoCard from '@/components/common/InfoCard.astro';
+import CategorySection from './_components/CategorySection.astro';
+import { vulnerabilityCategories, vulnerabilitySummaries } from './_components/categories';
+
+// Estadísticas
+const totalVulnerabilities = vulnerabilityCategories.reduce(
+  (sum, cat) => sum + cat.vulnerabilities.length,
+  0
+);
+const completedCount = 0; // En producción vendría del backend
+---
+
+<Layout title="Laboratorio de Vulnerabilidades">
+  <div class="container-lab py-8">
+    <PageHeader
+      title="Laboratorio de Vulnerabilidades Web"
+      subtitle="Practica y aprende sobre las vulnerabilidades web más comunes en un entorno controlado"
+      gradient={true}
+    />
+
+    <!-- Buscador/Filtro -->
+    <SearchBar
+      placeholder="Buscar vulnerabilidades por nombre, categoría o descripción..."
+      buttonText="Buscar"
+      inputId="search-input"
+      buttonId="search-button"
+    />
+
+    <!-- Título de resultados (se actualiza dinámicamente) -->
+    <div id="results-header" class="mb-8 hidden">
+      <h2 id="results-title" class="text-2xl font-bold text-white mb-2"></h2>
+      <p class="text-slate-400">Resultados de tu búsqueda</p>
+    </div>
+
+    <!-- Estadísticas rápidas -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <StatCard value={totalVulnerabilities} label="Vulnerabilidades" color="gradient" />
+      <StatCard value={completedCount} label="Completadas" color="primary" />
+      <StatCard value={vulnerabilityCategories.length} label="Categorías" color="accent" />
+      <StatCard 
+        value={`${Math.round((completedCount / totalVulnerabilities) * 100) || 0}%`} 
+        label="Progreso" 
+        color="yellow" 
+      />
+    </div>
+
+    <!-- Flag oculta para DOM XSS -->
+    <div id="flag" class="hidden" data-flag="FLAG{dom_xss_basico}"></div>
+
+    <!-- Contenedor de resultados -->
+    <div id="vulnerabilities-container">
+      <div class="space-y-8">
+        {vulnerabilityCategories.map((category) => (
+          <CategorySection
+            id={category.id}
+            title={category.title}
+            description={category.description}
+            vulnerabilities={category.vulnerabilities}
+            summary={vulnerabilitySummaries[category.id] || category.description}
+          />
+        ))}
+      </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="mt-8 grid md:grid-cols-2 gap-6">
+      <InfoCard title="Documentación">
+        <p class="text-sm text-slate-400 mb-4">
+          Consulta la guía completa de vulnerabilidades con ejemplos, payloads y técnicas de explotación.
+        </p>
+        <a href="/docs/VULNERABILITIES.md" class="btn-secondary text-sm" target="_blank">
+          Ver Documentación Completa
+        </a>
+      </InfoCard>
+
+      <EthicalBanner />
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Datos de vulnerabilidades para el filtrado
+  const vulnerabilityData = {
+    categories: [
+      {
+        id: 'owasp-top10',
+        title: 'OWASP Top 10 2021',
+        summary: `El OWASP Top 10 2021 representa las 10 vulnerabilidades más críticas en aplicaciones web según la Open Web Application Security Project. Incluye problemas como Broken Access Control (A01), donde los usuarios pueden acceder a recursos sin autorización; Cryptographic Failures (A02), que expone datos sensibles por falta de encriptación adecuada; Injection (A03), permitiendo ejecutar código malicioso a través de entradas no validadas; Insecure Design (A04), con fallos arquitectónicos fundamentales; Security Misconfiguration (A05), configuraciones por defecto inseguras; Vulnerable Components (A06), uso de bibliotecas con vulnerabilidades conocidas; Authentication Failures (A07), problemas en la gestión de sesiones y autenticación; Integrity Failures (A08), fallos en la integridad de software y datos; Logging Failures (A09), falta de monitoreo y registro adecuado; y SSRF (A10), que permite a atacantes hacer solicitudes a recursos internos del servidor.`,
+      },
+      {
+        id: 'xss',
+        title: 'Cross-Site Scripting (XSS)',
+        summary: `Cross-Site Scripting (XSS) es una vulnerabilidad que permite a atacantes inyectar código JavaScript malicioso en páginas web visitadas por otros usuarios. Existen tres tipos principales: Reflected XSS, donde el payload se refleja inmediatamente en la respuesta del servidor, típicamente a través de parámetros URL o formularios; Stored XSS, donde el código malicioso se almacena permanentemente en la base de datos y se ejecuta cada vez que un usuario visita la página afectada; y DOM-based XSS, donde la vulnerabilidad existe en el código JavaScript del lado del cliente que manipula el DOM de manera insegura. Estas vulnerabilidades pueden permitir robo de cookies, sesiones, redirecciones maliciosas y ejecución de acciones en nombre del usuario.`,
+      },
+      {
+        id: 'csrf',
+        title: 'Cross-Site Request Forgery (CSRF)',
+        summary: `Cross-Site Request Forgery (CSRF) es un ataque que fuerza a un usuario autenticado a ejecutar acciones no deseadas en una aplicación web. El ataque explota la confianza que la aplicación tiene en el navegador del usuario, enviando solicitudes HTTP desde un sitio malicioso mientras el usuario está autenticado. En CSRF Básico, los formularios no tienen protección mediante tokens, permitiendo que cualquier sitio web pueda enviar solicitudes en nombre del usuario. CSRF Avanzado involucra técnicas para bypass de tokens CSRF, como explotar vulnerabilidades en la validación de tokens, usar métodos HTTP alternativos, o aprovechar configuraciones CORS incorrectas. La protección incluye tokens CSRF, verificación de origen, y SameSite cookies.`,
+      },
+      {
+        id: 'file-upload',
+        title: 'File Upload Vulnerabilities',
+        summary: `Las vulnerabilidades de carga de archivos permiten a atacantes subir archivos maliciosos al servidor. En File Upload Básico, no hay validación del tipo de archivo, permitiendo subir scripts ejecutables como PHP, JSP, o ASP que pueden ser ejecutados por el servidor. El Bypass de Validación explota debilidades en los controles de validación, como verificar solo la extensión del archivo (que puede ser manipulada), no validar el contenido real del archivo, o permitir múltiples extensiones. Los atacantes pueden usar técnicas como doble extensión (.php.jpg), null bytes, o manipulación de headers MIME. Estas vulnerabilidades pueden llevar a ejecución remota de código, defacement del sitio, o almacenamiento de malware.`,
+      },
+      {
+        id: 'path-traversal',
+        title: 'Path Traversal',
+        summary: `Path Traversal (también conocido como Directory Traversal) permite a atacantes acceder a archivos y directorios fuera del directorio web raíz. En Path Traversal Básico, se usa la secuencia "../" para navegar hacia directorios padre y acceder a archivos del sistema como /etc/passwd en Linux o archivos de configuración. Path Traversal Avanzado involucra técnicas de bypass como codificación URL, doble codificación, codificación Unicode, o usar variantes como "..\\" en Windows. Los atacantes pueden leer archivos sensibles, archivos de configuración, código fuente, o incluso escribir archivos si tienen permisos. La protección requiere validación estricta de rutas, uso de rutas canónicas, y listas blancas de archivos permitidos.`,
+      },
+      {
+        id: 'ssti',
+        title: 'Server-Side Template Injection (SSTI)',
+        summary: `Server-Side Template Injection (SSTI) ocurre cuando un atacante puede inyectar código en plantillas del servidor que se procesan dinámicamente. SSTI Jinja2 afecta aplicaciones Python que usan el motor de plantillas Jinja2, permitiendo ejecutar código Python arbitrario a través de la inyección de expresiones. SSTI Twig afecta aplicaciones PHP que usan Twig, permitiendo ejecutar código PHP. Estas vulnerabilidades son extremadamente peligrosas ya que pueden llevar a ejecución remota de código (RCE), acceso completo al servidor, y compromiso de la aplicación y datos. La explotación típicamente involucra identificar el motor de plantillas, encontrar la sintaxis correcta, y escalar desde lectura de archivos hasta ejecución de comandos.`,
+      },
+      {
+        id: 'deserialization',
+        title: 'Insecure Deserialization',
+        summary: `Insecure Deserialization ocurre cuando aplicaciones deserializan datos no confiables sin validación adecuada. Python Pickle permite serializar objetos Python, pero deserializar datos maliciosos puede ejecutar código arbitrario durante el proceso de deserialización. PHP Unserialize tiene problemas similares, donde objetos maliciosos pueden ejecutar código durante la deserialización o manipular propiedades de objetos. Estas vulnerabilidades pueden llevar a ejecución remota de código, escalación de privilegios, o manipulación de datos de la aplicación. La protección requiere evitar deserializar datos de fuentes no confiables, usar formatos seguros como JSON, validar datos antes de deserializar, y restringir clases que pueden ser deserializadas.`,
+      },
+      {
+        id: 'business-logic',
+        title: 'Business Logic Vulnerabilities',
+        summary: `Las vulnerabilidades de lógica de negocio explotan fallos en la implementación de reglas de negocio de la aplicación. La Manipulación de Precios ocurre cuando los precios se validan o calculan en el cliente, permitiendo a atacantes modificar valores antes de enviarlos al servidor, o cuando el servidor no verifica correctamente los precios. La Manipulación de Stock permite a atacantes bypass de validaciones de inventario, como comprar más productos de los disponibles, usar números negativos, o explotar condiciones de carrera. Estas vulnerabilidades pueden llevar a pérdidas financieras, violación de reglas de negocio, o compromiso de la integridad de datos. La protección requiere validación estricta en el servidor, verificación de reglas de negocio en cada transacción, y uso de transacciones atómicas.`,
+      },
+    ],
+  };
+
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const searchButton = document.getElementById('search-button');
+  const resultsHeader = document.getElementById('results-header');
+  const resultsTitle = document.getElementById('results-title');
+  const container = document.getElementById('vulnerabilities-container');
+
+  function performSearch() {
+    const query = searchInput.value.trim().toLowerCase();
+    
+    if (!query) {
+      resultsHeader?.classList.add('hidden');
+      const allSections = container?.querySelectorAll('section');
+      allSections?.forEach(section => {
+        section.classList.remove('hidden');
+      });
+      const allCards = container?.querySelectorAll('[data-vuln-title]');
+      allCards?.forEach(card => {
+        (card as HTMLElement).classList.remove('hidden');
+      });
+      return;
+    }
+
+    resultsHeader?.classList.remove('hidden');
+    
+    if (resultsTitle) {
+      resultsTitle.innerHTML = `Resultados para: <span class="text-gradient">${query}</span>`;
+    }
+
+    const sections = container?.querySelectorAll('section');
+    sections?.forEach(section => {
+      const categoryId = section.getAttribute('data-category-id');
+      const category = vulnerabilityData.categories.find(c => c.id === categoryId);
+      
+      if (category) {
+        const matchesCategory = 
+          category.title.toLowerCase().includes(query) ||
+          category.summary.toLowerCase().includes(query);
+        
+        const vulnCards = section.querySelectorAll('[data-vuln-title]');
+        let hasVisibleVulns = false;
+        
+        vulnCards.forEach(card => {
+          const title = card.getAttribute('data-vuln-title') || '';
+          const description = card.getAttribute('data-vuln-description') || '';
+          const categoryAttr = card.getAttribute('data-vuln-category') || '';
+          const difficulty = card.getAttribute('data-vuln-difficulty') || '';
+          
+          const matches = 
+            title.includes(query) ||
+            description.includes(query) ||
+            categoryAttr.includes(query) ||
+            difficulty.includes(query);
+          
+          if (matches || matchesCategory) {
+            (card as HTMLElement).classList.remove('hidden');
+            hasVisibleVulns = true;
+          } else {
+            (card as HTMLElement).classList.add('hidden');
+          }
+        });
+        
+        if (hasVisibleVulns || matchesCategory) {
+          section.classList.remove('hidden');
+        } else {
+          section.classList.add('hidden');
+        }
+      }
+    });
+  }
+
+  searchButton?.addEventListener('click', performSearch);
+  
+  searchInput?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      performSearch();
+    }
+  });
+</script>

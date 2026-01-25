@@ -1,0 +1,27 @@
+---
+/**
+ * index.astro
+ * Landing page con aviso legal prominente
+ */
+import Layout from "@/layouts/Layout.astro";
+import HeroSection from "./index/_components/HeroSection.astro";
+---
+
+<Layout
+  classname="flex justify-center items-center"
+  title="Inicio"
+  showHeader={false}
+>
+  <HeroSection
+    title="Vulnerable Web"
+    subtitle="Aprende sobre seguridad web de manera práctica y segura. Un laboratorio educativo diseñado para entender vulnerabilidades en un entorno controlado."
+    primaryCta={{
+      text: "Acceder al Laboratorio",
+      href: "/login"
+    }}
+    secondaryCta={{
+      text: "Ver Términos de Uso",
+      href: "/legal"
+    }}
+  />
+</Layout>

@@ -1,0 +1,71 @@
+---
+/**
+ * UserInfo.astro
+ * Información del usuario en el perfil
+ */
+
+export interface Props {
+  username: string;
+  email: string;
+  role: string;
+  joinedAt: string;
+  lastLogin: string;
+  avatar?: string;
+}
+
+const { username, email, role, joinedAt, lastLogin, avatar } = Astro.props;
+---
+
+<div class="card p-6">
+  <h2 class="text-xl font-semibold text-white mb-6 flex items-center gap-2">
+    <svg
+      class="w-5 h-5 text-lab-primary-400"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+      />
+    </svg>
+    Información Personal
+  </h2>
+  <div class="space-y-4">
+    <div class="flex items-center gap-4">
+      <div class="w-16 h-16 rounded-full bg-gradient-to-br from-lab-primary-600 to-lab-accent-600 flex items-center justify-center">
+        {avatar ? (
+          <img class="rounded-full w-full h-full object-cover" src={avatar} alt="Foto de perfil" />
+        ) : (
+          <span class="text-white text-2xl font-bold">
+            {username[0].toUpperCase()}
+          </span>
+        )}
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-white">{username}</h3>
+        <p class="text-sm text-slate-400">{email}</p>
+        <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-xs bg-slate-700 text-slate-300">
+          {role}
+        </span>
+      </div>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-4 pt-4 border-t border-slate-700">
+      <div>
+        <p class="text-xs text-slate-500 mb-1">Miembro desde</p>
+        <p class="text-sm text-slate-300">{joinedAt}</p>
+      </div>
+      <div>
+        <p class="text-xs text-slate-500 mb-1">Último acceso</p>
+        <p class="text-sm text-slate-300">{lastLogin}</p>
+      </div>
+    </div>
+    <div class="pt-4 border-t border-slate-700">
+      <p class="text-gray-400 text-center text-sm">
+        Los datos de la cuenta "demo" se almacenan en local, la cuenta "admin" tendrá los datos en la nube.
+      </p>
+    </div>
+  </div>
+</div>

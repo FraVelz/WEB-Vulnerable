@@ -1,0 +1,29 @@
+---
+/**
+ * 404.astro
+ * Página de error 404 - Página no encontrada
+ */
+import Layout from "@/layouts/Layout.astro";
+import ErrorPage from "@/components/common/ErrorPage.astro";
+---
+
+<Layout
+  classname="flex justify-center items-center"
+  title="404 - Página no encontrada"
+  description="La página que buscas no existe o ha sido movida"
+  showHeader={false}
+>
+  <ErrorPage
+    code="404"
+    title="Página no encontrada"
+    message="Lo sentimos, la página que estás buscando no existe o ha sido movida. Puede que hayas escrito mal la URL o que la página haya sido eliminada."
+    primaryAction={{
+      text: "Volver al Inicio",
+      href: "/"
+    }}
+    secondaryAction={{
+      text: "Ir al Laboratorio",
+      href: "/hacking"
+    }}
+  />
+</Layout>

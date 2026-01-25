@@ -1,0 +1,50 @@
+---
+/**
+ * LevelHeader.astro
+ * Header del nivel con breadcrumb
+ */
+export interface Props {
+  levelId: string;
+  category: string;
+  difficulty: string;
+  title: string;
+  description: string;
+}
+
+const { levelId, category, difficulty, title, description } = Astro.props;
+
+const difficultyColors: Record<string, string> = {
+  'Básico': 'text-green-400 bg-green-500/10 border-green-500/30',
+  'Intermedio': 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30',
+  'Avanzado': 'text-red-400 bg-red-500/10 border-red-500/30',
+};
+---
+
+<!-- Breadcrumb -->
+<nav class="mb-6">
+  <ol class="flex items-center gap-2 text-sm">
+    <li>
+      <a href="/hacking" class="text-slate-400 hover:text-white transition-colors">
+        Panel de Niveles
+      </a>
+    </li>
+    <li class="text-slate-600">/</li>
+    <li class="text-slate-300">Nivel {levelId}</li>
+  </ol>
+</nav>
+
+<!-- Header del nivel -->
+<header class="mb-8">
+  <div class="flex flex-wrap items-center gap-3 mb-4">
+    <span class="text-xs text-slate-500 uppercase tracking-wider">{category}</span>
+    <span class={`px-2 py-1 rounded-full text-xs font-medium border ${difficultyColors[difficulty]}`}>
+      {difficulty}
+    </span>
+  </div>
+  <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+    <span class="text-lab-primary-400">Nivel {levelId}:</span> {title}
+  </h1>
+  <p class="text-lg text-slate-400 max-w-3xl">
+    {description}
+  </p>
+</header>

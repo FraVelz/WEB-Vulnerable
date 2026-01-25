@@ -1,0 +1,188 @@
+---
+/**
+ * [id].astro
+ * Template reutilizable para páginas de nivel individual
+ */
+import Layout from '@/layouts/Layout.astro';
+import LevelHeader from './_components/LevelHeader.astro';
+import LearningObjectives from './_components/LearningObjectives.astro';
+import KeyConcepts from './_components/KeyConcepts.astro';
+import BestPractices from './_components/BestPractices.astro';
+import PracticeZone from './_components/PracticeZone.astro';
+import LevelNavigation from './_components/LevelNavigation.astro';
+import EthicalBanner from '@/components/common/EthicalBanner.astro';
+
+export function getStaticPaths() {
+  // Definición de niveles disponibles
+  const levels = [
+    {
+      id: '1',
+      title: 'Fundamentos de Seguridad',
+      category: 'Introducción',
+      difficulty: 'Básico',
+      description: 'Introducción a los conceptos básicos de seguridad web.',
+      learningObjectives: [
+        'Entender qué es la seguridad web y por qué importa',
+        'Conocer las principales categorías de vulnerabilidades',
+        'Familiarizarse con OWASP y sus recursos',
+        'Comprender el ciclo de vida de las vulnerabilidades',
+      ],
+      concepts: [
+        { title: 'OWASP Top 10', description: 'Lista de las 10 vulnerabilidades más críticas en aplicaciones web.' },
+        { title: 'CIA Triad', description: 'Confidencialidad, Integridad y Disponibilidad - los pilares de la seguridad.' },
+        { title: 'Defensa en Profundidad', description: 'Estrategia de múltiples capas de seguridad.' },
+      ],
+      bestPractices: [
+        'Siempre validar y sanitizar entrada de usuarios',
+        'Usar HTTPS en toda la aplicación',
+        'Mantener software y dependencias actualizadas',
+        'Implementar el principio de mínimo privilegio',
+      ],
+    },
+    {
+      id: '2',
+      title: 'Validación de Entrada',
+      category: 'Input Handling',
+      difficulty: 'Básico',
+      description: 'Aprende sobre la importancia de validar datos de entrada.',
+      learningObjectives: [
+        'Comprender los riesgos de no validar entrada',
+        'Aprender técnicas de validación del lado del servidor',
+        'Entender la diferencia entre validación y sanitización',
+        'Implementar validación en formularios de manera segura',
+      ],
+      concepts: [
+        { title: 'Validación de Entrada', description: 'Proceso de verificar que los datos cumplen con el formato esperado.' },
+        { title: 'Sanitización', description: 'Proceso de limpiar datos para eliminar contenido potencialmente peligroso.' },
+        { title: 'Whitelist vs Blacklist', description: 'Enfoques para filtrar datos: permitir lo conocido vs bloquear lo malo.' },
+      ],
+      bestPractices: [
+        'Validar siempre en el servidor, no solo en el cliente',
+        'Usar listas blancas en lugar de listas negras',
+        'Escapar datos según el contexto de salida',
+        'Usar tipos de datos apropiados en el backend',
+      ],
+    },
+    {
+      id: '3',
+      title: 'Autenticación y Sesiones',
+      category: 'Autenticación',
+      difficulty: 'Intermedio',
+      description: 'Explora mecanismos de autenticación segura.',
+      learningObjectives: [
+        'Entender cómo funcionan las sesiones web',
+        'Aprender sobre almacenamiento seguro de contraseñas',
+        'Conocer los diferentes factores de autenticación',
+        'Implementar logout seguro y manejo de sesiones',
+      ],
+      concepts: [
+        { title: 'Hashing de Contraseñas', description: 'Técnica para almacenar contraseñas de forma segura usando funciones hash.' },
+        { title: 'Tokens de Sesión', description: 'Identificadores únicos que mantienen el estado de autenticación.' },
+        { title: 'MFA', description: 'Autenticación Multi-Factor para añadir capas de seguridad.' },
+      ],
+      bestPractices: [
+        'Usar algoritmos de hash modernos (bcrypt, Argon2)',
+        'Implementar bloqueo de cuenta tras intentos fallidos',
+        'Regenerar ID de sesión tras autenticación',
+        'Establecer tiempos de expiración apropiados',
+      ],
+    },
+    {
+      id: '4',
+      title: 'Control de Acceso',
+      category: 'Autorización',
+      difficulty: 'Intermedio',
+      description: 'Estudia patrones de autorización en aplicaciones web.',
+      learningObjectives: [
+        'Diferenciar entre autenticación y autorización',
+        'Implementar control de acceso basado en roles',
+        'Prevenir escalación de privilegios',
+        'Diseñar políticas de acceso efectivas',
+      ],
+      concepts: [
+        { title: 'RBAC', description: 'Control de Acceso Basado en Roles - asignar permisos a roles, no a usuarios.' },
+        { title: 'Principio de Mínimo Privilegio', description: 'Otorgar solo los permisos estrictamente necesarios.' },
+        { title: 'IDOR', description: 'Referencia Directa a Objetos Inseguros - acceso a recursos sin verificación.' },
+      ],
+      bestPractices: [
+        'Verificar autorización en cada solicitud',
+        'Usar referencias indirectas para recursos sensibles',
+        'Implementar logging de accesos',
+        'Revisar permisos periódicamente',
+      ],
+    },
+    {
+      id: '5',
+      title: 'Seguridad Avanzada',
+      category: 'Avanzado',
+      difficulty: 'Avanzado',
+      description: 'Técnicas avanzadas de defensa y configuración segura.',
+      learningObjectives: [
+        'Configurar headers de seguridad HTTP',
+        'Implementar Content Security Policy',
+        'Entender ataques de canal lateral',
+        'Diseñar arquitecturas seguras',
+      ],
+      concepts: [
+        { title: 'CSP', description: 'Content Security Policy - política para prevenir ejecución de código no autorizado.' },
+        { title: 'CORS', description: 'Cross-Origin Resource Sharing - control de acceso entre dominios.' },
+        { title: 'Security Headers', description: 'Cabeceras HTTP que añaden capas de protección.' },
+      ],
+      bestPractices: [
+        'Configurar CSP estricto',
+        'Usar headers como X-Frame-Options, HSTS',
+        'Implementar rate limiting',
+        'Realizar auditorías de seguridad regulares',
+      ],
+    },
+  ];
+
+  return levels.map((level) => ({
+    params: { id: level.id },
+    props: { level },
+  }));
+}
+
+interface Props {
+  level: {
+    id: string;
+    title: string;
+    category: string;
+    difficulty: string;
+    description: string;
+    learningObjectives: string[];
+    concepts: { title: string; description: string }[];
+    bestPractices: string[];
+  };
+}
+
+const { level } = Astro.props;
+---
+
+<Layout title={`Nivel ${level.id}: ${level.title}`}>
+  <div class="container-lab py-8">
+    <LevelHeader
+      levelId={level.id}
+      category={level.category}
+      difficulty={level.difficulty}
+      title={level.title}
+      description={level.description}
+    />
+
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Contenido principal -->
+      <div class="lg:col-span-2 space-y-8">
+        <LearningObjectives objectives={level.learningObjectives} />
+        <KeyConcepts concepts={level.concepts} />
+        <PracticeZone />
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <BestPractices practices={level.bestPractices} />
+        <LevelNavigation currentLevelId={level.id} />
+        <EthicalBanner />
+      </div>
+    </div>
+  </div>
+</Layout>

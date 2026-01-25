@@ -1,0 +1,31 @@
+---
+/**
+ * LegalSection.astro
+ * Componente para secciones del aviso legal
+ */
+export interface Props {
+  title: string;
+  iconPath: string;
+  iconColorClass?: string;
+  variant?: 'default' | 'warning' | 'danger' | 'info';
+}
+
+const { title, iconPath, iconColorClass = 'text-lab-primary-400', variant = 'default' } = Astro.props;
+
+const variantClasses = {
+  default: 'card p-6',
+  warning: 'card p-6 bg-red-500/5 border-red-500/20',
+  danger: 'card p-6 border-red-500/30',
+  info: 'card p-6 bg-lab-primary-500/5 border-lab-primary-500/20',
+};
+---
+
+<section class={variantClasses[variant]}>
+  <h2 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+    <svg class={`w-5 h-5 ${iconColorClass}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={iconPath} />
+    </svg>
+    {title}
+  </h2>
+  <slot />
+</section>

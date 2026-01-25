@@ -1,0 +1,82 @@
+---
+/**
+ * BaseLayout.astro
+ * Layout base para todas las páginas del laboratorio educativo
+ * Incluye meta tags de no-indexación y estructura común
+ */
+
+interface Props {
+  title: string;
+  classname?: string;
+  description?: string;
+  showHeader?: boolean;
+}
+
+const {
+  title,
+  classname = "",
+  description = "Laboratorio educativo de seguridad web - Aprende sobre vulnerabilidades en un entorno controlado",
+  showHeader = true,
+} = Astro.props;
+
+const fullTitle = `${title} | Vulnerable Web`;
+
+// Importar componentes
+import "@/styles/global.css";
+import BaseLayout from "./BaseLayout.astro";
+---
+
+<!doctype html>
+<html lang="es" class="scrollbar-custom">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Título y descripción -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+
+    <!-- ============================================================
+         META TAGS DE NO INDEXACIÓN
+         Este sitio NO debe ser indexado por motores de búsqueda
+         ============================================================ -->
+    <meta
+      name="robots"
+      content="noindex, nofollow, noarchive, nosnippet, noimageindex"
+    />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <meta name="bingbot" content="noindex, nofollow" />
+
+    <!-- Prevenir caché en buscadores -->
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="revisit-after" content="0 days" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Meta de seguridad adicional -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <meta name="referrer" content="no-referrer" />
+
+    <!-- Slot para meta tags adicionales -->
+    <slot name="head" />
+  </head>
+
+  <body class="min-h-screen flex flex-col">
+    <BaseLayout classname={classname} showHeader={showHeader}>
+      <slot />
+    </BaseLayout>
+
+    <!-- Slot para scripts adicionales -->
+    <slot name="scripts" />
+  </body>
+</html>

@@ -1,0 +1,42 @@
+---
+/**
+ * SettingToggle.astro
+ * Toggle de configuración reutilizable
+ */
+
+export interface Props {
+  label: string;
+  description: string;
+  checked: boolean;
+  iconColor?: 'green' | 'yellow' | 'blue' | 'purple';
+}
+
+const { label, description, checked, iconColor = 'green' } = Astro.props;
+
+const iconColorClasses: Record<string, string> = {
+  green: 'bg-green-500/10 text-green-400',
+  yellow: 'bg-yellow-500/10 text-yellow-400',
+  blue: 'bg-blue-500/10 text-blue-400',
+  purple: 'bg-purple-500/10 text-purple-400',
+};
+---
+
+<label class="flex items-center justify-between p-4 rounded-lg bg-slate-900/50 hover:bg-slate-900/70 transition-colors cursor-pointer">
+  <div class="flex items-center gap-3">
+    <div class={`w-10 h-10 rounded-lg flex items-center justify-center ${iconColorClasses[iconColor]}`}>
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <div>
+      <p class="font-medium text-white">{label}</p>
+      <p class="text-sm text-slate-400">{description}</p>
+    </div>
+  </div>
+  <input
+    type="checkbox"
+    checked={checked}
+    class="w-5 h-5 rounded border-slate-600 bg-slate-800 text-lab-primary-500 focus:ring-lab-primary-500"
+  />
+</label>

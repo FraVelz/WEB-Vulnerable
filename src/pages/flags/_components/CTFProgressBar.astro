@@ -1,0 +1,28 @@
+---
+/**
+ * CTFProgressBar.astro
+ * Barra de progreso del CTF
+ */
+export interface Props {
+  currentPoints: number;
+  maxPoints: number;
+}
+
+const { currentPoints, maxPoints } = Astro.props;
+---
+
+<div class="card p-6 mb-8">
+  <div class="flex items-center justify-between mb-2">
+    <span class="text-sm font-medium text-slate-300">Progreso General</span>
+    <span class="text-sm text-slate-400">
+      {currentPoints} / {maxPoints} puntos
+    </span>
+  </div>
+  <div class="progress-bar">
+    <div
+      class="progress-bar-fill"
+      style={`width: ${(currentPoints / maxPoints) * 100}%`}
+    >
+    </div>
+  </div>
+</div>

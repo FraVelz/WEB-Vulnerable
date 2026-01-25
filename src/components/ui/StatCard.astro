@@ -1,0 +1,28 @@
+---
+/**
+ * StatCard.astro
+ * Tarjeta de estadística reutilizable
+ */
+
+export interface Props {
+  value: string | number;
+  label: string;
+  color?: 'primary' | 'accent' | 'gradient' | 'yellow' | 'green' | 'red';
+}
+
+const { value, label, color = 'primary' } = Astro.props;
+
+const colorClasses = {
+  primary: 'text-lab-primary-400',
+  accent: 'text-lab-accent-400',
+  gradient: 'text-gradient',
+  yellow: 'text-yellow-400',
+  green: 'text-green-400',
+  red: 'text-red-400',
+};
+---
+
+<div class="card p-4 text-center">
+  <p class={`text-2xl font-bold ${colorClasses[color]}`}>{value}</p>
+  <p class="text-sm text-slate-400 mt-1">{label}</p>
+</div>

@@ -1,0 +1,287 @@
+
+// Resúmenes detallados de cada categoría
+export const vulnerabilitySummaries: Record<string, string> = {
+    'owasp-top10': `El OWASP Top 10 2021 representa las 10 vulnerabilidades más críticas en aplicaciones web según la Open Web Application Security Project. Incluye problemas como Broken Access Control (A01), donde los usuarios pueden acceder a recursos sin autorización; Cryptographic Failures (A02), que expone datos sensibles por falta de encriptación adecuada; Injection (A03), permitiendo ejecutar código malicioso a través de entradas no validadas; Insecure Design (A04), con fallos arquitectónicos fundamentales; Security Misconfiguration (A05), configuraciones por defecto inseguras; Vulnerable Components (A06), uso de bibliotecas con vulnerabilidades conocidas; Authentication Failures (A07), problemas en la gestión de sesiones y autenticación; Integrity Failures (A08), fallos en la integridad de software y datos; Logging Failures (A09), falta de monitoreo y registro adecuado; y SSRF (A10), que permite a atacantes hacer solicitudes a recursos internos del servidor.`,
+
+    'xss': `Cross-Site Scripting (XSS) es una vulnerabilidad que permite a atacantes inyectar código JavaScript malicioso en páginas web visitadas por otros usuarios. Existen tres tipos principales: Reflected XSS, donde el payload se refleja inmediatamente en la respuesta del servidor, típicamente a través de parámetros URL o formularios; Stored XSS, donde el código malicioso se almacena permanentemente en la base de datos y se ejecuta cada vez que un usuario visita la página afectada; y DOM-based XSS, donde la vulnerabilidad existe en el código JavaScript del lado del cliente que manipula el DOM de manera insegura. Estas vulnerabilidades pueden permitir robo de cookies, sesiones, redirecciones maliciosas y ejecución de acciones en nombre del usuario.`,
+
+    'csrf': `Cross-Site Request Forgery (CSRF) es un ataque que fuerza a un usuario autenticado a ejecutar acciones no deseadas en una aplicación web. El ataque explota la confianza que la aplicación tiene en el navegador del usuario, enviando solicitudes HTTP desde un sitio malicioso mientras el usuario está autenticado. En CSRF Básico, los formularios no tienen protección mediante tokens, permitiendo que cualquier sitio web pueda enviar solicitudes en nombre del usuario. CSRF Avanzado involucra técnicas para bypass de tokens CSRF, como explotar vulnerabilidades en la validación de tokens, usar métodos HTTP alternativos, o aprovechar configuraciones CORS incorrectas. La protección incluye tokens CSRF, verificación de origen, y SameSite cookies.`,
+
+    'file-upload': `Las vulnerabilidades de carga de archivos permiten a atacantes subir archivos maliciosos al servidor. En File Upload Básico, no hay validación del tipo de archivo, permitiendo subir scripts ejecutables como PHP, JSP, o ASP que pueden ser ejecutados por el servidor. El Bypass de Validación explota debilidades en los controles de validación, como verificar solo la extensión del archivo (que puede ser manipulada), no validar el contenido real del archivo, o permitir múltiples extensiones. Los atacantes pueden usar técnicas como doble extensión (.php.jpg), null bytes, o manipulación de headers MIME. Estas vulnerabilidades pueden llevar a ejecución remota de código, defacement del sitio, o almacenamiento de malware.`,
+
+    'path-traversal': `Path Traversal (también conocido como Directory Traversal) permite a atacantes acceder a archivos y directorios fuera del directorio web raíz. En Path Traversal Básico, se usa la secuencia "../" para navegar hacia directorios padre y acceder a archivos del sistema como /etc/passwd en Linux o archivos de configuración. Path Traversal Avanzado involucra técnicas de bypass como codificación URL, doble codificación, codificación Unicode, o usar variantes como "..\\" en Windows. Los atacantes pueden leer archivos sensibles, archivos de configuración, código fuente, o incluso escribir archivos si tienen permisos. La protección requiere validación estricta de rutas, uso de rutas canónicas, y listas blancas de archivos permitidos.`,
+
+    'ssti': `Server-Side Template Injection (SSTI) ocurre cuando un atacante puede inyectar código en plantillas del servidor que se procesan dinámicamente. SSTI Jinja2 afecta aplicaciones Python que usan el motor de plantillas Jinja2, permitiendo ejecutar código Python arbitrario a través de la inyección de expresiones. SSTI Twig afecta aplicaciones PHP que usan Twig, permitiendo ejecutar código PHP. Estas vulnerabilidades son extremadamente peligrosas ya que pueden llevar a ejecución remota de código (RCE), acceso completo al servidor, y compromiso de la aplicación y datos. La explotación típicamente involucra identificar el motor de plantillas, encontrar la sintaxis correcta, y escalar desde lectura de archivos hasta ejecución de comandos.`,
+
+    'deserialization': `Insecure Deserialization ocurre cuando aplicaciones deserializan datos no confiables sin validación adecuada. Python Pickle permite serializar objetos Python, pero deserializar datos maliciosos puede ejecutar código arbitrario durante el proceso de deserialización. PHP Unserialize tiene problemas similares, donde objetos maliciosos pueden ejecutar código durante la deserialización o manipular propiedades de objetos. Estas vulnerabilidades pueden llevar a ejecución remota de código, escalación de privilegios, o manipulación de datos de la aplicación. La protección requiere evitar deserializar datos de fuentes no confiables, usar formatos seguros como JSON, validar datos antes de deserializar, y restringir clases que pueden ser deserializadas.`,
+
+    'business-logic': `Las vulnerabilidades de lógica de negocio explotan fallos en la implementación de reglas de negocio de la aplicación. La Manipulación de Precios ocurre cuando los precios se validan o calculan en el cliente, permitiendo a atacantes modificar valores antes de enviarlos al servidor, o cuando el servidor no verifica correctamente los precios. La Manipulación de Stock permite a atacantes bypass de validaciones de inventario, como comprar más productos de los disponibles, usar números negativos, o explotar condiciones de carrera. Estas vulnerabilidades pueden llevar a pérdidas financieras, violación de reglas de negocio, o compromiso de la integridad de datos. La protección requiere validación estricta en el servidor, verificación de reglas de negocio en cada transacción, y uso de transacciones atómicas.`,
+};
+
+// Categorías de vulnerabilidades basadas en OWASP Top 10 y más
+export const vulnerabilityCategories = [
+    {
+        id: 'owasp-top10',
+        title: 'OWASP Top 10 2021',
+        description: 'Las 10 vulnerabilidades más críticas según OWASP',
+        icon: 'shield',
+        vulnerabilities: [
+            {
+                id: 'a01',
+                title: 'A01: Broken Access Control',
+                description: 'Control de acceso roto - IDOR, escalación de privilegios',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'Control de Acceso',
+            },
+            {
+                id: 'a02',
+                title: 'A02: Cryptographic Failures',
+                description: 'Fallos criptográficos - contraseñas en texto plano, hashes débiles',
+                difficulty: 'Básico',
+                status: 'available',
+                category: 'Criptografía',
+            },
+            {
+                id: 'a03',
+                title: 'A03: Injection',
+                description: 'Inyección SQL, NoSQL, Command, LDAP, XPath, XXE',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'Inyección',
+            },
+            {
+                id: 'a04',
+                title: 'A04: Insecure Design',
+                description: 'Diseño inseguro - falta de validación de negocio',
+                difficulty: 'Avanzado',
+                status: 'available',
+                category: 'Diseño',
+            },
+            {
+                id: 'a05',
+                title: 'A05: Security Misconfiguration',
+                description: 'Configuración incorrecta - headers faltantes, CORS, errores verbosos',
+                difficulty: 'Básico',
+                status: 'available',
+                category: 'Configuración',
+            },
+            {
+                id: 'a06',
+                title: 'A06: Vulnerable Components',
+                description: 'Componentes vulnerables y desactualizados',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'Dependencias',
+            },
+            {
+                id: 'a07',
+                title: 'A07: Authentication Failures',
+                description: 'Fallos de autenticación - sesiones, MFA, enumeración',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'Autenticación',
+            },
+            {
+                id: 'a08',
+                title: 'A08: Integrity Failures',
+                description: 'Fallos de integridad - CI/CD, deserialización, supply chain',
+                difficulty: 'Avanzado',
+                status: 'available',
+                category: 'Integridad',
+            },
+            {
+                id: 'a09',
+                title: 'A09: Logging Failures',
+                description: 'Fallos de registro y monitoreo de seguridad',
+                difficulty: 'Básico',
+                status: 'available',
+                category: 'Logging',
+            },
+            {
+                id: 'a10',
+                title: 'A10: SSRF',
+                description: 'Server-Side Request Forgery - acceso a servicios internos',
+                difficulty: 'Avanzado',
+                status: 'available',
+                category: 'SSRF',
+            },
+        ],
+    },
+    {
+        id: 'xss',
+        title: 'Cross-Site Scripting (XSS)',
+        description: 'Vulnerabilidades XSS en todas sus variantes',
+        icon: 'code',
+        vulnerabilities: [
+            {
+                id: 'xss-reflected',
+                title: 'Reflected XSS',
+                description: 'XSS reflejado - payload en la respuesta inmediata',
+                difficulty: 'Básico',
+                status: 'available',
+                category: 'XSS',
+            },
+            {
+                id: 'xss-stored',
+                title: 'Stored XSS',
+                description: 'XSS almacenado - payload persistente en la base de datos',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'XSS',
+            },
+            {
+                id: 'xss-dom',
+                title: 'DOM-based XSS',
+                description: 'XSS basado en DOM - vulnerabilidad en JavaScript del cliente',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'XSS',
+            },
+        ],
+    },
+    {
+        id: 'csrf',
+        title: 'Cross-Site Request Forgery (CSRF)',
+        description: 'Ataques CSRF y protección contra ellos',
+        icon: 'refresh',
+        vulnerabilities: [
+            {
+                id: 'csrf-basic',
+                title: 'CSRF Básico',
+                description: 'CSRF sin protección - formularios sin tokens',
+                difficulty: 'Básico',
+                status: 'available',
+                category: 'CSRF',
+            },
+            {
+                id: 'csrf-advanced',
+                title: 'CSRF Avanzado',
+                description: 'Bypass de tokens CSRF y técnicas avanzadas',
+                difficulty: 'Avanzado',
+                status: 'available',
+                category: 'CSRF',
+            },
+        ],
+    },
+    {
+        id: 'file-upload',
+        title: 'File Upload Vulnerabilities',
+        description: 'Vulnerabilidades en carga de archivos',
+        icon: 'upload',
+        vulnerabilities: [
+            {
+                id: 'file-upload-basic',
+                title: 'File Upload Básico',
+                description: 'Carga de archivos maliciosos sin validación',
+                difficulty: 'Básico',
+                status: 'available',
+                category: 'File Upload',
+            },
+            {
+                id: 'file-upload-bypass',
+                title: 'Bypass de Validación',
+                description: 'Bypass de validación de tipo de archivo',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'File Upload',
+            },
+        ],
+    },
+    {
+        id: 'path-traversal',
+        title: 'Path Traversal',
+        description: 'Acceso a archivos fuera del directorio web',
+        icon: 'folder',
+        vulnerabilities: [
+            {
+                id: 'path-traversal-basic',
+                title: 'Path Traversal Básico',
+                description: 'Lectura de archivos del sistema con ../',
+                difficulty: 'Básico',
+                status: 'available',
+                category: 'Path Traversal',
+            },
+            {
+                id: 'path-traversal-advanced',
+                title: 'Path Traversal Avanzado',
+                description: 'Bypass de filtros y técnicas avanzadas',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'Path Traversal',
+            },
+        ],
+    },
+    {
+        id: 'ssti',
+        title: 'Server-Side Template Injection (SSTI)',
+        description: 'Inyección en plantillas del servidor',
+        icon: 'template',
+        vulnerabilities: [
+            {
+                id: 'ssti-jinja2',
+                title: 'SSTI Jinja2',
+                description: 'Inyección en plantillas Jinja2 (Python)',
+                difficulty: 'Avanzado',
+                status: 'available',
+                category: 'SSTI',
+            },
+            {
+                id: 'ssti-twig',
+                title: 'SSTI Twig',
+                description: 'Inyección en plantillas Twig (PHP)',
+                difficulty: 'Avanzado',
+                status: 'available',
+                category: 'SSTI',
+            },
+        ],
+    },
+    {
+        id: 'deserialization',
+        title: 'Insecure Deserialization',
+        description: 'Deserialización insegura de objetos',
+        icon: 'database',
+        vulnerabilities: [
+            {
+                id: 'deserialization-python',
+                title: 'Python Pickle',
+                description: 'Deserialización insegura en Python',
+                difficulty: 'Avanzado',
+                status: 'available',
+                category: 'Deserialización',
+            },
+            {
+                id: 'deserialization-php',
+                title: 'PHP Unserialize',
+                description: 'Deserialización insegura en PHP',
+                difficulty: 'Avanzado',
+                status: 'available',
+                category: 'Deserialización',
+            },
+        ],
+    },
+    {
+        id: 'business-logic',
+        title: 'Business Logic Vulnerabilities',
+        description: 'Vulnerabilidades en la lógica de negocio',
+        icon: 'briefcase',
+        vulnerabilities: [
+            {
+                id: 'logic-price',
+                title: 'Manipulación de Precios',
+                description: 'Modificar precios en el cliente o en peticiones',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'Lógica de Negocio',
+            },
+            {
+                id: 'logic-stock',
+                title: 'Manipulación de Stock',
+                description: 'Bypass de validaciones de inventario',
+                difficulty: 'Intermedio',
+                status: 'available',
+                category: 'Lógica de Negocio',
+            },
+        ],
+    },
+];

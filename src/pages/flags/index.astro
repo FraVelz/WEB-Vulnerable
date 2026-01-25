@@ -1,0 +1,91 @@
+---
+/**
+ * flags.astro
+ * Página de CTF (Capture The Flag) - Sistema de banderas
+ */
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import StatCard from "@/components/ui/StatCard.astro";
+import InfoCard from "@/components/common/InfoCard.astro";
+import FlagCard from "./_components/FlagCard.astro";
+import CTFProgressBar from "./_components/CTFProgressBar.astro";
+import flags from "@/utils/flags";
+
+// Estadísticas
+const totalFlags = flags.length;
+const completedFlags = flags.filter((f) => f.status === "completed").length;
+const availableFlags = flags.filter((f) => f.status === "available").length;
+const totalPoints = flags
+  .filter((f) => f.status === "completed")
+  .reduce((sum, f) => sum + f.points, 0);
+const maxPoints = flags.reduce((sum, f) => sum + f.points, 0);
+---
+
+<Layout title="CTF - Capture The Flag">
+  <div class="container-lab py-8">
+    <PageHeader
+      title="Capture The Flag"
+      subtitle="Completa desafíos de seguridad y captura flags para demostrar tus habilidades"
+      gradient={true}
+    />
+
+    <!-- Estadísticas del CTF -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <StatCard
+        value={`${completedFlags}/${totalFlags}`}
+        label="Flags Capturadas"
+        color="gradient"
+      />
+      <StatCard value={totalPoints} label="Puntos Totales" color="primary" />
+      <StatCard value={availableFlags} label="Disponibles" color="yellow" />
+      <StatCard
+        value={`${Math.round((totalPoints / maxPoints) * 100) || 0}%`}
+        label="Progreso"
+        color="accent"
+      />
+    </div>
+
+    <CTFProgressBar currentPoints={totalPoints} maxPoints={maxPoints} />
+
+    <!-- Lista de flags -->
+    <div class="space-y-4">
+      <h2 class="text-xl font-semibold text-white mb-4">
+        Desafíos Disponibles
+      </h2>
+
+      {flags.map((flag) => (
+        <FlagCard
+          id={flag.id}
+          title={flag.title}
+          description={flag.description}
+          category={flag.category}
+          difficulty={flag.difficulty}
+          points={flag.points}
+          status={flag.status}
+          hint={flag.hint}
+        />
+      ))}
+    </div>
+
+    <!-- Información sobre CTF -->
+    <InfoCard title="¿Cómo funciona el CTF?">
+      <div class="space-y-3 text-sm text-slate-400">
+        <p>
+          Cada desafío tiene una <strong class="text-white">flag</strong> que debes
+          encontrar explotando una vulnerabilidad. Las flags tienen el formato: <code
+            class="text-lab-primary-400 bg-slate-800 px-1.5 py-0.5 rounded"
+            >{`FLAG{texto_aqui}`}</code
+          >
+        </p>
+        <p>
+          Completa los desafíos en orden para desbloquear los siguientes. Cada
+          flag capturada te otorga puntos según su dificultad.
+        </p>
+        <p>
+          <strong class="text-white">Tip:</strong> Usa las pistas si te quedas atascado,
+          pero intenta resolverlo por tu cuenta primero.
+        </p>
+      </div>
+    </InfoCard>
+  </div>
+</Layout>

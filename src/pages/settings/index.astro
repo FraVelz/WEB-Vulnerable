@@ -1,0 +1,139 @@
+---
+/**
+ * settings.astro
+ * Página de configuración y preferencias del usuario
+ */
+import Layout from "@/layouts/Layout.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import InfoCard from "@/components/common/InfoCard.astro";
+import SettingsSection from "./_components/SettingsSection.astro";
+import SettingToggle from "./_components/SettingToggle.astro";
+import SettingsSidebar from "./_components/SettingsSidebar.astro";
+import DangerZone from "./_components/DangerZone.astro";
+
+// Configuración actual del usuario (en producción vendría del backend)
+const currentSettings = {
+  appearance: {
+    theme: "dark",
+    fontSize: "medium" as "small" | "medium" | "large",
+    animations: true,
+  },
+  account: {
+    username: "demo",
+    email: "lab@example.com",
+  },
+};
+---
+
+<Layout title="Configuración">
+  <div class="container-lab py-8">
+    <PageHeader
+      title="Configuración"
+      subtitle="Personaliza tu experiencia en el laboratorio de vulnerabilidades"
+    />
+
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Columna principal -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Apariencia -->
+        <SettingsSection title="Apariencia">
+          <div class="space-y-4">
+            <div class="p-4 rounded-lg bg-slate-900/50">
+              <label class="block mb-2">
+                <p class="font-medium text-white mb-1">Tamaño de Fuente</p>
+                <p class="text-sm text-slate-400 mb-3">
+                  Ajusta el tamaño del texto para mejor legibilidad
+                </p>
+                <select
+                  class="input w-full"
+                  value={currentSettings.appearance.fontSize}
+                >
+                  <option value="small">Pequeño</option>
+                  <option value="medium">Mediano</option>
+                  <option value="large">Grande</option>
+                </select>
+              </label>
+            </div>
+
+            <SettingToggle
+              label="Animaciones"
+              description="Habilita animaciones y transiciones suaves"
+              checked={currentSettings.appearance.animations}
+              icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />'
+              iconColor="purple"
+            />
+          </div>
+        </SettingsSection>
+
+        <!-- Cuenta -->
+        <SettingsSection title="Cuenta">
+          <div class="space-y-4">
+            <div class="p-4 rounded-lg bg-slate-900/50">
+              <p class="font-medium text-white mb-2">Información de Cuenta</p>
+              <div class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Usuario:</span>
+                  <span class="text-slate-300">{currentSettings.account.username}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Email:</span>
+                  <span class="text-slate-300">{currentSettings.account.email}</span>
+                </div>
+              </div>
+              <button class="btn-secondary mt-4 text-sm">
+                Cambiar Contraseña
+              </button>
+            </div>
+
+            <DangerZone />
+          </div>
+        </SettingsSection>
+
+        <!-- Exportar/Importar Datos -->
+        <SettingsSection title="Datos">
+          <div class="space-y-3">
+            <p class="text-sm text-slate-400 mb-4">
+              Exporta o importa tu progreso y configuración
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button class="btn-primary flex-1">
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  />
+                </svg>
+                Exportar Datos
+              </button>
+              <button class="btn-secondary flex-1">
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                  />
+                </svg>
+                Importar Datos
+              </button>
+            </div>
+          </div>
+        </SettingsSection>
+      </div>
+
+      <SettingsSidebar />
+    </div>
+  </div>
+</Layout>

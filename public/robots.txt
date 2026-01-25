@@ -1,0 +1,33 @@
+# =============================================================================
+# VULNERABLE WEB - ROBOTS.TXT
+# =============================================================================
+# Este sitio es un laboratorio educativo de seguridad web.
+# NO debe ser indexado por motores de búsqueda.
+# Uso exclusivo para aprendizaje en entornos controlados.
+# =============================================================================
+
+# Bloquear todos los robots de indexación
+User-agent: *
+Disallow: /
+
+# Bloquear específicamente bots conocidos
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
+
+User-agent: Slurp
+Disallow: /
+
+User-agent: DuckDuckBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+# No hay sitemap - sitio no indexable
+# Sitemap: none

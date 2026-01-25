@@ -1,0 +1,55 @@
+# =============================================================================
+# VULNERABLE WEB - GITIGNORE
+# =============================================================================
+
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+.astro/
+
+# Archivos de entorno (nunca commitear)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temp
+tmp/
+temp/
+*.tmp
+
+# Database (desarrollo local)
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Misc
+*.bak
+*.backup

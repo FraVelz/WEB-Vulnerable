@@ -10,105 +10,7 @@ import InfoCard from "@/components/common/InfoCard.astro";
 import AdminHeader from "./_components/AdminHeader.astro";
 import UsersTable from "./_components/UsersTable.astro";
 
-// Lista de usuarios del sistema (en producción vendría del backend)
-const users = [
-  {
-    id: "usr_001",
-    username: "admin",
-    email: "admin@vulnerableweb.local",
-    role: "admin" as const,
-    status: "active" as const,
-    lastLogin: "2026-01-20 14:30:00",
-    createdAt: "2025-12-01",
-    flagsCaptured: 10,
-    vulnerabilitiesCompleted: 25,
-    points: 2500,
-    ipAddress: "192.168.1.100",
-    location: "Madrid, ES",
-    twoFactor: true,
-    sessions: 2,
-  },
-  {
-    id: "usr_002",
-    username: "demo",
-    email: "demo@vulnerableweb.local",
-    role: "student" as const,
-    status: "active" as const,
-    lastLogin: "2026-01-20 12:15:00",
-    createdAt: "2026-01-15",
-    flagsCaptured: 2,
-    vulnerabilitiesCompleted: 3,
-    points: 300,
-    ipAddress: "192.168.1.105",
-    location: "Barcelona, ES",
-    twoFactor: false,
-    sessions: 1,
-  },
-  {
-    id: "usr_003",
-    username: "student_01",
-    email: "student01@example.com",
-    role: "student" as const,
-    status: "active" as const,
-    lastLogin: "2026-01-19 18:45:00",
-    createdAt: "2026-01-10",
-    flagsCaptured: 5,
-    vulnerabilitiesCompleted: 8,
-    points: 850,
-    ipAddress: "192.168.1.120",
-    location: "Valencia, ES",
-    twoFactor: false,
-    sessions: 1,
-  },
-  {
-    id: "usr_004",
-    username: "instructor_01",
-    email: "instructor@vulnerableweb.local",
-    role: "instructor" as const,
-    status: "active" as const,
-    lastLogin: "2026-01-20 09:00:00",
-    createdAt: "2025-11-20",
-    flagsCaptured: 10,
-    vulnerabilitiesCompleted: 25,
-    points: 2500,
-    ipAddress: "192.168.1.50",
-    location: "Sevilla, ES",
-    twoFactor: true,
-    sessions: 3,
-  },
-  {
-    id: "usr_005",
-    username: "test_user",
-    email: "test@example.com",
-    role: "student" as const,
-    status: "suspended" as const,
-    lastLogin: "2026-01-18 10:20:00",
-    createdAt: "2026-01-05",
-    flagsCaptured: 0,
-    vulnerabilitiesCompleted: 1,
-    points: 50,
-    ipAddress: "192.168.1.200",
-    location: "Bilbao, ES",
-    twoFactor: false,
-    sessions: 0,
-  },
-  {
-    id: "usr_006",
-    username: "security_researcher",
-    email: "researcher@security.local",
-    role: "student" as const,
-    status: "active" as const,
-    lastLogin: "2026-01-20 16:00:00",
-    createdAt: "2026-01-12",
-    flagsCaptured: 8,
-    vulnerabilitiesCompleted: 15,
-    points: 1800,
-    ipAddress: "192.168.1.88",
-    location: "Málaga, ES",
-    twoFactor: true,
-    sessions: 1,
-  },
-];
+import users from "./_components/users";
 
 // Estadísticas generales
 const totalUsers = users.length;
@@ -117,7 +19,7 @@ const suspendedUsers = users.filter((u) => u.status === "suspended").length;
 const totalPoints = users.reduce((sum, u) => sum + u.points, 0);
 ---
 
-<Layout title="Panel de Administración - Usuarios" showNavbar={true}>
+<Layout title="Panel de Administración - Usuarios" showHeader={true}>
   <div class="container-lab py-8">
     <AdminHeader />
 

@@ -3,12 +3,14 @@
  * login.astro
  * Página de login para usuarios del laboratorio
  */
-import Layout from '@/layouts/Layout.astro';
-import LoginForm from './_components/LoginForm.astro';
+import Layout from "@/layouts/Layout.astro";
+import LoginForm from "./_components/LoginForm.astro";
 ---
 
-<Layout title="Acceso al Laboratorio" showHeader={false}>
-  <div class="min-h-screen flex items-center justify-center py-12 px-4">
-    <LoginForm />
-  </div>
+<Layout
+  classname="flex items-center justify-center"
+  title="Acceso al Laboratorio"
+  showHeader={false}
+>
+  <LoginForm />
 </Layout>

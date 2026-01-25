@@ -3,11 +3,23 @@
  * UsersTable.astro
  * Tabla de usuarios con acciones
  */
-import type { User } from "@/types";
+
 import UserTableRow from "./UserTableRow.astro";
 
-export interface Props {
-  users: User[];
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: "admin" | "instructor" | "student";
+  status: "active" | "suspended" | "inactive";
+  flagsCaptured: number;
+  vulnerabilitiesCompleted: number;
+  points: number;
+  lastLogin: string;
+  ipAddress: string;
+  location: string;
+  sessions: number;
+  twoFactor: boolean;
 }
 
 const { users } = Astro.props;
@@ -27,7 +39,7 @@ const { users } = Astro.props;
           stroke-linejoin="round"
           stroke-width="2"
           d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-        />
+        ></path>
       </svg>
       Lista de Usuarios
     </h2>
@@ -44,7 +56,7 @@ const { users } = Astro.props;
             stroke-linejoin="round"
             stroke-width="2"
             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-          />
+          ></path>
         </svg>
         Exportar
       </button>
@@ -59,8 +71,7 @@ const { users } = Astro.props;
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-          />
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
         </svg>
         Nuevo Usuario
       </button>
@@ -96,23 +107,25 @@ const { users } = Astro.props;
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-800">
-        {users.map((user) => (
-          <UserTableRow
-            id={user.id}
-            username={user.username}
-            email={user.email}
-            role={user.role}
-            status={user.status}
-            flagsCaptured={user.flagsCaptured}
-            vulnerabilitiesCompleted={user.vulnerabilitiesCompleted}
-            points={user.points}
-            lastLogin={user.lastLogin}
-            ipAddress={user.ipAddress}
-            location={user.location}
-            sessions={user.sessions}
-            twoFactor={user.twoFactor}
-          />
-        ))}
+        {
+          users.map((user: User) => (
+            <UserTableRow
+              id={user.id}
+              username={user.username}
+              email={user.email}
+              role={user.role}
+              status={user.status}
+              flagsCaptured={user.flagsCaptured}
+              vulnerabilitiesCompleted={user.vulnerabilitiesCompleted}
+              points={user.points}
+              lastLogin={user.lastLogin}
+              ipAddress={user.ipAddress}
+              location={user.location}
+              sessions={user.sessions}
+              twoFactor={user.twoFactor}
+            />
+          ))
+        }
       </tbody>
     </table>
   </div>

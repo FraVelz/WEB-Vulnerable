@@ -6,12 +6,13 @@
 export interface Props {
   currentPoints: number;
   maxPoints: number;
+  classname?: string;
 }
 
-const { currentPoints, maxPoints } = Astro.props;
+const { currentPoints, maxPoints, classname = "" } = Astro.props;
 ---
 
-<div class="card p-6 mb-8">
+<div class={`card p-6 ${classname}`}>
   <div class="flex items-center justify-between mb-2">
     <span class="text-sm font-medium text-slate-300">Progreso General</span>
     <span class="text-sm text-slate-400">

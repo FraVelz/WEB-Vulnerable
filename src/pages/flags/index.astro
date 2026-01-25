@@ -19,52 +19,62 @@ const totalPoints = flags
   .filter((f) => f.status === "completed")
   .reduce((sum, f) => sum + f.points, 0);
 const maxPoints = flags.reduce((sum, f) => sum + f.points, 0);
+
+interface Flag {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  difficulty: 'Básico' | 'Intermedio' | 'Avanzado';
+  points: number;
+  status: 'locked' | 'available' | 'completed';
+  hint?: string;
+}
+
 ---
 
-<Layout title="CTF - Capture The Flag">
-  <div class="container-lab py-8">
+<Layout title="Banderas">
+  <div class="container-lab py-8 flex flex-col gap-8">
     <PageHeader
-      title="Capture The Flag"
-      subtitle="Completa desafíos de seguridad y captura flags para demostrar tus habilidades"
+      title="Captura la Bandera"
+      subtitle="Hackea esta pagina, y registra aqui las banderas encontradas."
       gradient={true}
     />
 
     <!-- Estadísticas del CTF -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="flex justify-center gap-4">
       <StatCard
+        classname="h-full"
         value={`${completedFlags}/${totalFlags}`}
-        label="Flags Capturadas"
+        label="Flags"
         color="gradient"
       />
-      <StatCard value={totalPoints} label="Puntos Totales" color="primary" />
-      <StatCard value={availableFlags} label="Disponibles" color="yellow" />
-      <StatCard
-        value={`${Math.round((totalPoints / maxPoints) * 100) || 0}%`}
-        label="Progreso"
-        color="accent"
+
+      <CTFProgressBar
+        classname="w-full"
+        currentPoints={totalPoints}
+        maxPoints={maxPoints}
       />
     </div>
 
-    <CTFProgressBar currentPoints={totalPoints} maxPoints={maxPoints} />
-
     <!-- Lista de flags -->
     <div class="space-y-4">
-      <h2 class="text-xl font-semibold text-white mb-4">
-        Desafíos Disponibles
-      </h2>
+      <h2 class="text-xl font-semibold text-white mb-4">Desafíos</h2>
 
-      {flags.map((flag) => (
-        <FlagCard
-          id={flag.id}
-          title={flag.title}
-          description={flag.description}
-          category={flag.category}
-          difficulty={flag.difficulty}
-          points={flag.points}
-          status={flag.status}
-          hint={flag.hint}
-        />
-      ))}
+      {
+        flags.map((flag: Flag) => (
+          <FlagCard
+            id={flag.id}
+            title={flag.title}
+            description={flag.description}
+            category={flag.category}
+            difficulty={flag.difficulty}
+            points={flag.points}
+            status={flag.status}
+            hint={flag.hint}
+          />
+        ))
+      }
     </div>
 
     <!-- Información sobre CTF -->

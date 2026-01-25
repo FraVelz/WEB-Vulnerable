@@ -1,5 +1,16 @@
 // Flags del CTF (en producción vendrían del backend)
-const flags = [
+interface Flag {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  difficulty: 'Básico' | 'Intermedio' | 'Avanzado';
+  points: number;
+  status: 'locked' | 'available' | 'completed';
+  hint?: string;
+}
+
+const flags: Flag[] = [
   {
     id: "flag-001",
     title: "Primera Inyección SQL",

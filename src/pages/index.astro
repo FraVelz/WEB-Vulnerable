@@ -4,7 +4,19 @@
  * Landing page con aviso legal prominente
  */
 import Layout from "@/layouts/Layout.astro";
-import HeroSection from "./index/_components/HeroSection.astro";
+
+// Datos de la página
+const title = "Vulnerable Web";
+const subtitle =
+  "Aprende sobre seguridad web de manera práctica y segura. Un laboratorio educativo diseñado para entender vulnerabilidades en un entorno controlado.";
+const primaryCta = {
+  text: "Acceder al Laboratorio",
+  href: "/login",
+};
+const secondaryCta = {
+  text: "Ver Términos de Uso",
+  href: "/legal",
+};
 ---
 
 <Layout
@@ -12,16 +24,65 @@ import HeroSection from "./index/_components/HeroSection.astro";
   title="Inicio"
   showHeader={false}
 >
-  <HeroSection
-    title="Vulnerable Web"
-    subtitle="Aprende sobre seguridad web de manera práctica y segura. Un laboratorio educativo diseñado para entender vulnerabilidades en un entorno controlado."
-    primaryCta={{
-      text: "Acceder al Laboratorio",
-      href: "/login"
-    }}
-    secondaryCta={{
-      text: "Ver Términos de Uso",
-      href: "/legal"
-    }}
-  />
+  <div class="flex flex-col items-center gap-6">
+    <!-- Logo grande -->
+    <img class="size-44 rounded-full" src="./icon.svg" alt="Logo de la pagina web" />
+
+    <h1 class="text-4xl md:text-6xl font-bold">
+      <span class="text-gradient">{title.split(" ")[0]}</span>
+      {
+        title.split(" ").slice(1).length > 0 && (
+          <span class="text-white"> {title.split(" ").slice(1).join(" ")}</span>
+        )
+      }
+    </h1>
+
+    <p class="text-xl text-slate-400 max-w-2xl text-center">
+      {subtitle}
+    </p>
+
+    <!-- CTA Buttons -->
+    {
+      (primaryCta || secondaryCta) && (
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          {primaryCta && (
+            <a href={primaryCta.href} class="btn-primary text-lg px-8 py-3">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                />
+              </svg>
+              {primaryCta.text}
+            </a>
+          )}
+          {secondaryCta && (
+            <a href={secondaryCta.href} class="btn-secondary text-lg px-8 py-3">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              {secondaryCta.text}
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
 </Layout>

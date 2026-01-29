@@ -4,7 +4,6 @@
  * Tarjeta de flag CTF
  */
 
-import Badge from '@/components/ui/Badge.astro';
 import DifficultyBadge from '@/components/ui/DifficultyBadge.astro';
 
 export interface Props {
@@ -13,164 +12,149 @@ export interface Props {
   description: string;
   category: string;
   difficulty: 'Básico' | 'Intermedio' | 'Avanzado';
-  points: number;
-  status: 'locked' | 'available' | 'completed';
-  hint?: string;
+  methodologies?: string[];
+  correctFlag?: string;
 }
 
-const { id, title, description, category, difficulty, points, status, hint } = Astro.props;
-
-const statusConfig = {
-  locked: {
-    badge: 'badge-locked',
-    text: 'Bloqueado',
-  },
-  available: {
-    badge: 'badge-info',
-    text: 'Disponible',
-  },
-  completed: {
-    badge: 'badge-success',
-    text: 'Completado',
-  },
-};
-
-const config = statusConfig[status];
+const { id, title, description, category, difficulty, methodologies = [], correctFlag } = Astro.props;
 ---
 
-<div class={`card p-6 ${status === 'locked' ? 'opacity-60' : ''}`}>
-  <div class="flex items-start justify-between mb-4">
-    <div class="flex-1">
-      <div class="flex items-center gap-3 mb-2">
-        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-lab-primary-600/20 to-lab-accent-600/20 flex items-center justify-center border border-slate-700">
-          <span class="text-lg font-bold text-lab-primary-400">
-            #{id.split('-')[1]}
-          </span>
+<div class="card p-6" data-flag-id={id}>
+  <div class="mb-4">
+    <div class="flex items-start justify-between mb-3">
+      <div class="flex-1">
+        <h3 class="font-semibold text-white mb-2 text-lg">{title}</h3>
+        <p class="text-sm text-slate-400 mb-3">{description}</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3 mb-3">
+      <DifficultyBadge difficulty={difficulty} />
+      <span class="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">{category}</span>
+    </div>
+
+    {methodologies && methodologies.length > 0 && (
+      <div class="mt-3 p-3 rounded-lg bg-slate-900/50 border border-slate-700">
+        <p class="text-xs text-slate-500 font-medium mb-2">Metodologías:</p>
+        <div class="flex flex-wrap gap-2">
+          {methodologies.map((method) => (
+            <span class="text-xs text-lab-primary-400 bg-lab-primary-500/10 px-2 py-1 rounded border border-lab-primary-500/20">
+              {method}
+            </span>
+          ))}
         </div>
-        <div class="flex-1">
-          <h3 class="font-semibold text-white mb-1">{title}</h3>
-          <p class="text-sm text-slate-400">{description}</p>
-        </div>
       </div>
-
-      <div class="flex flex-wrap items-center gap-3 mt-3">
-        <DifficultyBadge difficulty={difficulty} />
-        <span class="text-xs text-slate-500">{category}</span>
-        <span class="text-xs text-lab-accent-400 font-medium">
-          {points} puntos
-        </span>
-      </div>
-    </div>
-
-    <Badge text={config.text} variant={status === 'locked' ? 'locked' : status === 'completed' ? 'success' : 'info'} />
-  </div>
-
-  {status === 'available' && hint && (
-    <div class="mt-4 p-4 rounded-lg bg-slate-900/50 border border-slate-700">
-      <div class="flex items-start gap-2 mb-2">
-        <svg
-          class="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-          />
-        </svg>
-        <p class="text-xs text-slate-500 font-medium">Pista:</p>
-      </div>
-      <p class="text-sm text-slate-300">{hint}</p>
-    </div>
-  )}
-
-  {status === 'completed' && (
-    <div class="mt-4 p-4 rounded-lg bg-green-500/10 border border-green-500/30">
-      <div class="flex items-center gap-2">
-        <svg
-          class="w-5 h-5 text-green-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-        <span class="text-sm text-green-400 font-medium">
-          Flag capturada: {id}
-        </span>
-      </div>
-    </div>
-  )}
-
-  <div class="mt-4">
-    {status === 'locked' ? (
-      <button
-        class="btn-secondary w-full opacity-50 cursor-not-allowed"
-        disabled
-      >
-        <svg
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-          />
-        </svg>
-        Completa desafíos anteriores
-      </button>
-    ) : status === 'completed' ? (
-      <button class="btn-secondary w-full">
-        <svg
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-          />
-        </svg>
-        Ver Solución
-      </button>
-    ) : (
-      <a href={`/challenge/${id}`} class="btn-primary w-full">
-        <svg
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-          />
-        </svg>
-        Intentar Desafío
-      </a>
     )}
   </div>
+
+  <!-- Estado completado -->
+  <div id={`completed-${id}`} class="hidden mt-4 p-4 rounded-lg bg-green-500/10 border border-green-500/30">
+    <div class="flex items-center gap-2 mb-2">
+      <svg
+        class="w-5 h-5 text-green-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span class="text-sm text-green-400 font-medium">Flag verificada correctamente</span>
+    </div>
+    <div class="mt-2 p-2 rounded bg-slate-900/50 border border-green-500/20">
+      <p class="text-xs text-slate-400 mb-1">Flag capturada:</p>
+      <code id={`flag-value-${id}`} class="text-sm text-green-400 font-mono break-all"></code>
+    </div>
+  </div>
+
+  <!-- Formulario de flag -->
+  <div id={`form-${id}`} class="mt-4">
+    <div class="flex gap-2">
+      <input
+        type="text"
+        id={`flag-input-${id}`}
+        placeholder="Pega tu flag aquí (FLAG{...})"
+        class="flex-1 px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-lab-primary-500 focus:ring-1 focus:ring-lab-primary-500"
+      />
+      <button
+        id={`submit-${id}`}
+        class="btn-primary px-6 whitespace-nowrap"
+      >
+        Verificar
+      </button>
+    </div>
+    <div id={`error-${id}`} class="hidden mt-2 text-sm text-red-400"></div>
+  </div>
 </div>
+
+<script define:vars={{ flagId: id, correctFlagValue: correctFlag }}>
+  (function() {
+    const submitButton = document.getElementById(`submit-${flagId}`);
+    const flagInput = document.getElementById(`flag-input-${flagId}`);
+    const completedDiv = document.getElementById(`completed-${flagId}`);
+    const formDiv = document.getElementById(`form-${flagId}`);
+    const errorDiv = document.getElementById(`error-${flagId}`);
+    const flagValueDiv = document.getElementById(`flag-value-${flagId}`);
+
+    // Verificar si ya está completado (desde localStorage)
+    const savedFlag = localStorage.getItem(`flag-${flagId}`);
+    if (savedFlag && savedFlag === correctFlagValue) {
+      if (completedDiv) completedDiv.classList.remove('hidden');
+      if (formDiv) formDiv.classList.add('hidden');
+      if (flagValueDiv) flagValueDiv.textContent = savedFlag;
+    }
+
+    submitButton?.addEventListener('click', () => {
+      const userFlag = flagInput?.value.trim() || '';
+      
+      if (!userFlag) {
+        if (errorDiv) {
+          errorDiv.textContent = 'Por favor ingresa una flag';
+          errorDiv.classList.remove('hidden');
+        }
+        return;
+      }
+
+      // Verificar formato básico
+      if (!userFlag.startsWith('FLAG{') || !userFlag.endsWith('}')) {
+        if (errorDiv) {
+          errorDiv.textContent = 'Formato incorrecto. Debe ser FLAG{...}';
+          errorDiv.classList.remove('hidden');
+        }
+        return;
+      }
+
+      // Verificar flag
+      if (userFlag === correctFlagValue) {
+        // Guardar en localStorage
+        localStorage.setItem(`flag-${flagId}`, userFlag);
+        
+        // Mostrar estado completado
+        if (completedDiv) completedDiv.classList.remove('hidden');
+        if (formDiv) formDiv.classList.add('hidden');
+        if (flagValueDiv) flagValueDiv.textContent = userFlag;
+        if (errorDiv) errorDiv.classList.add('hidden');
+        
+        // Disparar evento personalizado para actualizar estadísticas
+        window.dispatchEvent(new CustomEvent('flag-completed'));
+      } else {
+        if (errorDiv) {
+          errorDiv.textContent = 'Flag incorrecta. Intenta de nuevo.';
+          errorDiv.classList.remove('hidden');
+        }
+        if (flagInput) flagInput.value = '';
+      }
+    });
+
+    // Permitir Enter para enviar
+    flagInput?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        submitButton?.click();
+      }
+    });
+  })();
+</script>

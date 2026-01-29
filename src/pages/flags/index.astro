@@ -5,20 +5,13 @@
  */
 import Layout from "@/layouts/Layout.astro";
 import PageHeader from "@/components/ui/PageHeader.astro";
-import StatCard from "@/components/ui/StatCard.astro";
 import InfoCard from "@/components/common/InfoCard.astro";
 import FlagCard from "./_components/FlagCard.astro";
-import CTFProgressBar from "./_components/CTFProgressBar.astro";
 import flags from "@/utils/flags";
 
 // Estadísticas
 const totalFlags = flags.length;
-const completedFlags = flags.filter((f) => f.status === "completed").length;
-const availableFlags = flags.filter((f) => f.status === "available").length;
-const totalPoints = flags
-  .filter((f) => f.status === "completed")
-  .reduce((sum, f) => sum + f.points, 0);
-const maxPoints = flags.reduce((sum, f) => sum + f.points, 0);
+const completedFlags = 0; // Se calculará en el cliente
 
 interface Flag {
   id: string;
@@ -26,9 +19,8 @@ interface Flag {
   description: string;
   category: string;
   difficulty: 'Básico' | 'Intermedio' | 'Avanzado';
-  points: number;
-  status: 'locked' | 'available' | 'completed';
-  hint?: string;
+  methodologies?: string[];
+  correctFlag: string;
 }
 
 ---
@@ -43,19 +35,39 @@ interface Flag {
 
     <!-- Estadísticas del CTF -->
     <div class="flex justify-center gap-4">
-      <StatCard
-        classname="h-full"
-        value={`${completedFlags}/${totalFlags}`}
-        label="Flags"
-        color="gradient"
-      />
-
-      <CTFProgressBar
-        classname="w-full"
-        currentPoints={totalPoints}
-        maxPoints={maxPoints}
-      />
+      <div id="stats-container" class="w-full max-w-md">
+        <div class="card p-6 bg-gradient-to-br from-lab-primary-500/10 to-lab-accent-500/10 border border-lab-primary-500/20">
+          <div class="text-4xl font-bold text-white mb-2 text-center">
+            <span id="completed-count">0</span>/{totalFlags}
+          </div>
+          <div class="text-sm text-slate-400 text-center">Flags Completadas</div>
+        </div>
+      </div>
     </div>
+
+    <script define:vars={{ flagsData: JSON.stringify(flags.map(f => ({ id: f.id, correctFlag: f.correctFlag }))), totalFlags: totalFlags }}>
+      // Calcular flags completadas desde localStorage
+      function updateCompletedCount() {
+        const flags = JSON.parse(flagsData);
+        let count = 0;
+        flags.forEach((flag) => {
+          const saved = localStorage.getItem(`flag-${flag.id}`);
+          if (saved && saved === flag.correctFlag) {
+            count++;
+          }
+        });
+        const countElement = document.getElementById('completed-count');
+        if (countElement) {
+          countElement.textContent = count.toString();
+        }
+      }
+      
+      updateCompletedCount();
+      // Actualizar cuando cambie localStorage (desde otra pestaña)
+      window.addEventListener('storage', updateCompletedCount);
+      // Actualizar cuando se complete una flag
+      window.addEventListener('flag-completed', updateCompletedCount);
+    </script>
 
     <!-- Lista de flags -->
     <div class="space-y-4">
@@ -69,9 +81,8 @@ interface Flag {
             description={flag.description}
             category={flag.category}
             difficulty={flag.difficulty}
-            points={flag.points}
-            status={flag.status}
-            hint={flag.hint}
+            methodologies={flag.methodologies}
+            correctFlag={flag.correctFlag}
           />
         ))
       }
@@ -88,12 +99,12 @@ interface Flag {
           >
         </p>
         <p>
-          Completa los desafíos en orden para desbloquear los siguientes. Cada
-          flag capturada te otorga puntos según su dificultad.
+          Todos los desafíos están disponibles desde el inicio. Pega la flag que encuentres
+          en el campo de texto y verifica si es correcta.
         </p>
         <p>
-          <strong class="text-white">Tip:</strong> Usa las pistas si te quedas atascado,
-          pero intenta resolverlo por tu cuenta primero.
+          <strong class="text-white">Tip:</strong> Cada desafío muestra las metodologías
+          que debes usar. Estudia cada vulnerabilidad antes de intentar explotarla.
         </p>
       </div>
     </InfoCard>

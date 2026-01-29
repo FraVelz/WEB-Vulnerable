@@ -1,0 +1,117 @@
+name: Deploy Astro to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set base path
+        id: base_path
+        run: |
+          REPO_NAME="${{ github.event.repository.name }}"
+          OWNER="${{ github.repository_owner }}"
+          if [[ "$REPO_NAME" == "$OWNER.github.io" ]]; then
+            BASE_PATH="/"
+          else
+            BASE_PATH="/$REPO_NAME/"
+          fi
+          echo "base=$BASE_PATH" >> $GITHUB_OUTPUT
+          echo "Base path set to: $BASE_PATH"
+          echo "Repository: $REPO_NAME"
+          echo "Owner: $OWNER"
+
+      - name: Build
+        run: npm run build
+        env:
+          BASE_PATH: ${{ steps.base_path.outputs.base }}
+          SITE_URL: https://${{ github.repository_owner }}.github.io
+        continue-on-error: false
+
+      - name: Verify build output
+        run: |
+          echo "=== Build Output Verification ==="
+          echo "Base path: ${{ steps.base_path.outputs.base }}"
+          echo ""
+          echo "Root files:"
+          ls -la dist/ | head -20 || echo "dist directory not found"
+          echo ""
+          if [ -f "dist/index.html" ]; then
+            echo "✓ index.html found"
+          else
+            echo "✗ index.html not found"
+            exit 1
+          fi
+          if [ -f "dist/404.html" ]; then
+            echo "✓ 404.html found"
+          else
+            echo "⚠ 404.html not found"
+          fi
+          echo ""
+          echo "Checking routes structure:"
+          echo "Hacking route:"
+          if [ -d "dist/hacking" ]; then
+            echo "✓ /hacking directory found"
+            ls -la dist/hacking/ || true
+            if [ -f "dist/hacking/index.html" ]; then
+              echo "✓ /hacking/index.html found"
+            else
+              echo "✗ /hacking/index.html NOT found"
+            fi
+          else
+            echo "✗ /hacking directory NOT found"
+            echo "Looking for hacking files:"
+            find dist -name "*hacking*" -type f | head -5 || true
+          fi
+          echo ""
+          echo "Flags route:"
+          if [ -d "dist/flags" ]; then
+            echo "✓ /flags directory found"
+            ls -la dist/flags/ || true
+            if [ -f "dist/flags/index.html" ]; then
+              echo "✓ /flags/index.html found"
+            else
+              echo "✗ /flags/index.html NOT found"
+            fi
+          else
+            echo "✗ /flags directory NOT found"
+          fi
+          echo ""
+          echo "All directories in dist:"
+          find dist -type d -maxdepth 2 | sort || true
+
+      - name: Create .nojekyll file
+        run: |
+          touch dist/.nojekyll
+          echo "Created .nojekyll file for GitHub Pages"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

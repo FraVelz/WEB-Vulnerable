@@ -7,8 +7,8 @@
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
-  { href: "/hacking", label: "Hacking", icon: "grid" },
-  { href: "/flags", label: "Banderas", icon: "chart" },
+  { href: "/WEB-Vulnerable/hacking", label: "Hacking", icon: "grid" },
+  { href: "/WEB-Vulnerable/flags", label: "Banderas", icon: "chart" },
 ];
 
 function isActive(href: string): boolean {
@@ -104,20 +104,20 @@ function isActive(href: string): boolean {
               <p class="text-xs text-slate-400">lab@example.com</p>
             </div>
             <a
-              href="/profile"
+              href="/WEB-Vulnerable/profile"
               class="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white"
             >
               Perfil
             </a>
             <a
-              href="/settings"
+              href="/WEB-Vulnerable/settings"
               class="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white"
             >
               Configuración
             </a>
             <hr class="my-2 border-slate-700" />
             <a
-              href="/logout"
+              href="/WEB-Vulnerable/logout"
               class="block px-4 py-2 text-sm text-red-400 hover:bg-slate-700 hover:text-red-300"
             >
               Cerrar Sesión

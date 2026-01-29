@@ -3,17 +3,11 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind()],
-  site: 'http://localhost:4321',
-  // Configuración de seguridad para entorno educativo
-  server: {
-    host: true, // Permite acceso desde red local para laboratorio
-    port: 4321
-  },
+  // URL del sitio - se sobrescribe en producción con variable de entorno
+  site: 'https://fravelz.github.io/WEB-Vulnerable/',
+  base: '/WEB-Vulnerable/',
+
   // Build output para despliegue controlado
   output: 'static',
-  build: {
-    // No generar sourcemaps en producción
-    inlineStylesheets: 'auto'
-  }
+  integrations: [tailwind()],
 });

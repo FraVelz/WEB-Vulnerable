@@ -9,6 +9,8 @@ node_modules/
 # Build output
 dist/
 .astro/
+.next/
+out/
 
 # Archivos de entorno (nunca commitear)
 .env
